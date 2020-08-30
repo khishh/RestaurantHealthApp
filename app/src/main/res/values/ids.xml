@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="textView" type="id" />
+    <item name="textView2" type="id" />
+    <item name="textView4" type="id" />
+    <item name="textView6" type="id" />
+    <item name="textView8" type="id" />
+    <item name="imageView_hazard_level_icon" type="id" />
+    <item name="textView3" type="id" />
+    <item name="textView_date" type="id" />
+    <item name="textView_type" type="id" />
+    <item name="textView_critical_issues" type="id" />
+    <item name="textView_non_critical_issues" type="id" />
+    <item name="textView_hazard_level" type="id" />
+    <item name="listView_violation" type="id" />
+</resources>

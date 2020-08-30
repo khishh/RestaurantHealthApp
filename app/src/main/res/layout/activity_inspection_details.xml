@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+    
+    <data>
+        
+        <variable
+            name="inspection"
+            type="com.example.cmpt276project.model.Inspection" />
+        
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.inspectionDetail.InspectionDetailsActivity">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/inspection_RecycleView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/Inspection_inspection_report"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/date_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/Inspection_date"
+            android:textColor="#000000"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            />
+
+        <TextView
+            android:id="@+id/inspection_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:textColor="#000000"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/date_title"
+            app:layout_constraintStart_toEndOf="@id/date_title"
+            app:layout_constraintTop_toTopOf="@id/date_title"
+            android:text="@{inspection.inspectionDate.toString()}"
+            />
+
+        <TextView
+            android:id="@+id/type_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/Inspection_type"
+            android:textColor="#000000"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/date_title" />
+
+        <TextView
+            android:id="@+id/inspection_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:textColor="#000000"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/type_title"
+            app:layout_constraintStart_toEndOf="@id/type_title"
+            app:layout_constraintTop_toTopOf="@id/type_title"
+            android:text="@{inspection.inspectionType_S}"
+            />
+
+        <TextView
+            android:id="@+id/num_critical_issue_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/Inspection_critical_issues"
+            android:textColor="#000000"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/type_title" />
+
+        <TextView
+            android:id="@+id/num_critical_issue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:textColor="#000000"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/num_critical_issue_title"
+            app:layout_constraintStart_toEndOf="@id/num_critical_issue_title"
+            app:layout_constraintTop_toTopOf="@id/num_critical_issue_title"
+            android:text="@{String.valueOf(inspection.numOfCritical)}"/>
+
+        <TextView
+            android:id="@+id/num_non_critical_issue_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/Inspection_non_critical_issues"
+            android:textColor="#000000"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/num_critical_issue_title" />
+
+        <TextView
+            android:id="@+id/num_non_critical_issue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:textColor="#000000"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/num_non_critical_issue_title"
+            app:layout_constraintStart_toEndOf="@id/num_non_critical_issue_title"
+            app:layout_constraintTop_toTopOf="@id/num_non_critical_issue_title"
+            android:text="@{String.valueOf(inspection.numOfNonCritical)}"
+            />
+
+        <TextView
+            android:id="@+id/textView_hazard_level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:textColor="@{inspection.hazardLevel}"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView_hazard_level_icon"
+            app:layout_constraintStart_toEndOf="@+id/imageView_hazard_level_icon"
+            app:layout_constraintTop_toTopOf="@+id/imageView_hazard_level_icon"
+            android:text="@{inspection.hazardLevel.toString()}"
+            />
+
+        <ImageView
+            android:id="@+id/imageView_hazard_level_icon"
+            android:layout_width="32dp"
+            android:layout_height="27dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            app:layout_constraintBottom_toBottomOf="@id/num_critical_issue_title"
+            app:layout_constraintStart_toEndOf="@id/num_non_critical_issue"
+            app:layout_constraintTop_toTopOf="@id/num_critical_issue_title"
+            android:srcColor="@{inspection.hazardLevel}"
+            android:contentDescription="@string/todo" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/Inspection_violation_list"
+            android:textColor="#000000"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/num_non_critical_issue_title" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    
+</layout>

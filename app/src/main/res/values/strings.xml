@@ -1,0 +1,173 @@
+<resources>
+    <!--System-->
+    <string name="app_name">FoodSafetyInSurrey</string>
+    <string name="restaurant_list_activity_title_list">List of Restaurants</string>
+    <string name="restaurant_list_activity_title_map">Map</string>
+    <string name="restaurant_activity_title">Restaurant Details</string>
+    <string name="inspection_activity_title">Inspection Report</string>
+    <string name="Inspection_inspection_report">Inspection Report</string>
+    <string name="Inspection_date">Date:</string>
+    <string name="Inspection_testing_date"></string>
+    <string name="Inspection_type">Type:</string>
+    <string name="Inspection_testing_type"></string>
+    <string name="Inspection_critical_issues">Number of Critical Issues:</string>
+    <string name="Inspection_testing_critical_issues"></string>
+    <string name="Inspection_non_critical_issues">Number of Non-Critical Issues:</string>
+    <string name="Inspection_testing_non_critical_issues"></string>
+    <string name="Inspection_testing_image">Image</string>
+    <string name="Inspection_testing_hazard_level"></string>
+    <string name="Inspection_violation_description">Violation Description</string>
+    <string name="Inspection_violation_list">List of Violations</string>
+    <string name="Restaurant_details">Restaurant Details</string>
+    <string name="AddressView">Address:</string>
+    <string name="GPSCoordView">GPS Coords:</string>
+    <string name="RecentInspectionView">Most Recent Inspection</string>
+    <string name="critIssuesView">Critical Issues:</string>
+    <string name="nonCriticalIssuesView">Non Critical Issues:</string>
+    <string name="InspectionApter_violation">Violation</string>
+    <string name="InspectionApter_description_testing_text">Equipment/Utensils/Food/Pest/Employee
+        Problem</string>
+    <string name="RestaurantList_list_of_restaurants">List of Restaurants</string>
+    <string name="InspectionApter_critical">Critical</string>
+    <string name="InspectionApter_not_critical">Not Critical</string>
+    <string name="name">Name:</string>
+    <string name="total_number_of_issues">Total number of issues:</string>
+    <string name="last_inspection">Last Inspection:</string>
+    <string name="todo">TODO</string>
+    <string name="no_inspection_msg">No Inspections Available</string>
+    <color name="Inspection_color_red">#FF0000</color>
+    <color name="Inspection_color_yellow">#FFC107</color>
+    <color name="Inspection_color_green">#4CAF50</color>
+
+    <string name="update_dialog_title">Would you like to check for an update?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="api_key" translatable="false">AIzaSyCoYr5u0LHXv60nhvif9e5gpTMwUeFm17M</string>
+
+    <!--WelcomeActivity-->
+    <string name="welcome_activity_food_safety">Food\nSafety\nin\nSurrey</string>
+    <string name="welcome_activity_toast_checking_update">Checking Update</string>
+    <!--WelcomeActivity - LoadingDialog-->
+    <string name="loading_dialog_downloading">Downloading...</string>
+    <!--WelcomeActivity - UpdateDialog-->
+    <string name="update_dialog_data_update">Data Update</string>
+    <string name="update_dialog_message">The latest update data has been found.\nDo you want to update?</string>
+    <string name="update_dialog_yes">Yes</string>
+    <string name="update_dialog_cancel">Cancel</string>
+    <!--WelcomeActivity - NoUpdateDialog-->
+    <string name="no_update_dialog_no_update_required">No Update Required</string>
+    <string name="no_update_dialog_message">You are running the latest version.</string>
+    <string name="no_update_dialog_yes">Yes</string>
+    <!--RestaurantListActivity-->
+    <string name="restaurant_list_activity_name">Name:</string>
+    <string name="restaurant_list_activity_total_number_of_issues">Total number of issues:</string>
+    <string name="restaurant_list_activity_last_inspection">Last Inspection:</string>
+    <string name="restaurant_list_activity_no_inspections_yet">No Inspections Yet</string>
+    <string name="restaurant_list_activity_permission_denied">Permission Denied</string>
+    <!--RestaurantListActivity - Search Filter-->
+    <string name="search_filter_search">Search</string>
+    <string name="search_filter_found_new_inspections">Found New Inspections</string>
+    <string name="search_filter_ok_button">OK</string>
+    <string name="search_filter_restaurant_name">Type Restaurant Name</string>
+    <string name="search_filter_only_Favourite">Only Favourite"</string>
+    <string name="search_filter_reset_search">Reset Search</string>
+    <string name="search_filter_min">Min</string>
+    <string name="search_filter_max">Max</string>
+    <!--RestaurantDetailsActivity-->
+    <string name="restaurant_activity_address">Address:</string>
+    <string name="restaurant_activity_gps_coordinates">GPS Coordinates:</string>
+    <string name="restaurant_activity_most_recent_inspection">Most Recent Inspection</string>
+    <string name="restaurant_activity_critical_issues">Critical Issues:</string>
+    <string name="restaurant_activity_non_critical_issues">Non-Critical Issues:</string>
+    <!--InspectionDetailsActivity-->
+    <string name="inspection_activity_report_details">Report Details</string>
+    <string name="inspection_activity_date">Date:</string>
+    <string name="inspection_activity_type">Type:</string>
+    <string name="inspection_activity_critical_issues">Number of Critical Issues:</string>
+    <string name="inspection_activity_non_critical_issues">Number of Non-Critical Issues:</string>
+    <string name="inspection_activity_violation_list">List of Violations</string>
+    <!--InspectionDetailsActivity - InspectionAdapter-->
+    <string name="inspection_adapter_violation">Violation</string>
+    <string name="inspection_adapter_critical">Critical</string>
+    <string name="inspection_adapter_not_critical">Not Critical</string>
+    <!--Inspection Class-->
+    <string name="inspection_class_routine">Routine</string>
+    <string name="inspection_class_follow_up">Follow-Up</string>
+    <string name="inspection_class_low">Low</string>
+    <string name="inspection_class_moderate">Moderate</string>
+    <string name="inspection_class_high">High</string>
+    <!--Violation Class-->
+    <string name="violation_class_critical">Critical</string>
+    <string name="violation_class_not_critical">Not Critical</string>
+    <string name="violation_class_error">Error</string>
+    <string name="violation_class_equipment">Equipment</string>
+    <string name="violation_class_utensil">Utensil</string>
+    <string name="violation_class_food">Food</string>
+    <string name="violation_class_pest">Pest</string>
+    <string name="violation_class_employee">Employee</string>
+    <string name="violation_class_other">Other</string>
+    <string name="violation_class_issue">Issue</string>
+    <!--Restaurant Map Fragment-->
+    <string name="restaurant_map_fragment_address">Address</string>
+    <string name="restaurant_map_fragment_hazard_level">Hazard Level</string>
+    <string name="restaurant_map_fragment_multi_restaurants_message">Multiple Restaurant found at this address</string>
+    <string name="restaurant_map_fragment_location_permission_needed">Location Permission Needed</string>
+    <string name="restaurant_map_fragment_location_permission_message">This app needs the Location permission, please accept to use location functionality</string>
+    <string name="restaurant_map_fragment_yes">Yes</string>
+    <string name="restaurant_map_fragment_current_position">Current Position</string>
+    <!--ChooseOneRestaurantDialog-->
+    <string name="choose_dialog_selection_message">Select one restaurant to see details</string>
+    <!-- Violation Message-->
+    <string name="violation_message_a1">Adequate handwashing stations not available for employees [s. 21(4)]</string>
+    <string name="violation_message_c1_1">Chemicals, cleansers, &amp; similar agents stored or labeled improperly [s. 27]</string>
+    <string name="violation_message_c1_2">Chemicals cleansers &amp; similar agents stored or labeled improperly [s. 27]</string>
+    <string name="violation_message_c2">Cold potentially hazardous food stored/displayed above 4 °C. [s. 14(2)]</string>
+    <string name="violation_message_c3_1">Conditions observed that may allow entrance/harbouring/breeding of pests [s. 26(b),(c)]</string>
+    <string name="violation_message_c3_2">Conditions observed that may allow entrance/harbouring/breeding of pests [s. 26(b)(c)]</string>
+    <string name="violation_message_e1">Employee does not wash hands properly or at adequate frequency [s. 21(3)]</string>
+    <string name="violation_message_e2_1">Employee lacks good personal hygiene, clean clothing and hair control [s. 21(1)]</string>
+    <string name="violation_message_e2_2">Employee lacks good personal hygiene clean clothing and hair control [s. 21(1)]</string>
+    <string name="violation_message_e3">Employee smoking in food preparation/processing/storage areas [s. 21(2)]</string>
+    <string name="violation_message_e4">Equipment/facilities/hot &amp; cold water for sanitary maintenance not adequate [s. 17(3); s. 4(1)(f)]</string>
+    <string name="violation_message_e5">Equipment/utensils/food contact surfaces are not in good working order [s. 16(b)]</string>
+    <string name="violation_message_e6">Equipment/utensils/food contact surfaces are not of suitable design/material [s. 16; s. 19]</string>
+    <string name="violation_message_e7">Equipment/utensils/food contact surfaces not maintained in sanitary condition [s. 17(1)]</string>
+    <string name="violation_message_e8">Equipment/utensils/food contact surfaces not properly washed and sanitized [s. 17(2)]</string>
+    <string name="violation_message_f1">Failure to hold a valid permit while operating a food service establishment [s. 8(1)]</string>
+    <string name="violation_message_f2">Food contaminated or unfit for human consumption [s. 13]</string>
+    <string name="violation_message_f3">Food not cooked or reheated in a manner that makes it safe to eat [s. 14(1)]</string>
+    <string name="violation_message_f4">Food not cooled in an acceptable manner [s. 12(a)]</string>
+    <string name="violation_message_f5">Food not processed in a manner that makes it safe to eat [s. 14(1)]</string>
+    <string name="violation_message_f6">Food not protected from contamination [s. 12(a)]</string>
+    <string name="violation_message_f7">Food not thawed in an acceptable manner [s. 14(2)]</string>
+    <string name="violation_message_f8">Food premises not maintained in a sanitary condition [s. 17(1)]</string>
+    <string name="violation_message_f9">Foods obtained from unapproved sources [s. 11]</string>
+    <string name="violation_message_f10">Frozen potentially hazardous food stored/displayed above -18 °C. [s. 14(3)]</string>
+    <string name="violation_message_h1">Hot potentially hazardous food stored/displayed below 60 °C. [s. 14(2)]</string>
+    <string name="violation_message_i1_1">In operator\'s absence, no staff on duty has FOODSAFE Level 1 or equivalent [s. 10(2)]</string>
+    <string name="violation_message_i1_2">In operator\’s absence no staff on duty has FOODSAFE Level 1 or equivalent [s. 10(2)]</string>
+    <string name="violation_message_i2">Items not required for food premises operation being stored on the premises [s. 18]</string>
+    <string name="violation_message_l1">Live animal on the premises, excluding guide animal in approved areas [s. 25(1)]</string>
+    <string name="violation_message_o1">Operation of an unapproved food premises [s. 6(1)]</string>
+    <string name="violation_message_o2">Operator does not have FOODSAFE Level 1 or Equivalent [s. 10(1)]</string>
+    <string name="violation_message_o3">Operator has not provided acceptable written food handling procedures [s. 23]</string>
+    <string name="violation_message_o4">Operator has not provided acceptable written sanitation procedures [s. 24]</string>
+    <string name="violation_message_p1">Permit not posted in a conspicuous location [s. 8(7)]</string>
+    <string name="violation_message_p2">Plans/construction/alterations not in accordance with the Regulation [s. 3; s. 4]</string>
+    <string name="violation_message_p3">Premises not free of pests [s. 26(a)]</string>
+    <string name="violation_message_p4">Premises not maintained as per approved plans [s. 6(1)(b)]</string>
+    <string name="violation_message_r1">Refrigeration units and hot holding equipment lack accurate thermometers [s. 19(2)]</string>
+    <string name="violation_message_s1">Single use containers &amp; utensils are used more than once [s. 20]</string>
+    <!--Other-->
+    <string name="menu_switch" translatable="false">switch</string>
+
+    <array name="spinner_color">
+        <item>All</item>
+        <item>Low</item>
+        <item>Moderate</item>
+        <item>High</item>
+    </array>
+</resources>

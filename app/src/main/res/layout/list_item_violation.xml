@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <data>
+        <variable
+            name="violation"
+            type="com.example.cmpt276project.model.Violation" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="MissingConstraints">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/violation_constraint_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#E4E3E3">
+
+                <TextView
+                    android:id="@+id/critical_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:text=""
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/numViolations_textView"
+                    app:layout_constraintStart_toEndOf="@+id/numViolations_textView"
+                    app:layout_constraintTop_toTopOf="@+id/numViolations_textView" />
+
+                <ImageView
+                    android:id="@+id/equipment_image"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/violation_title"
+                    app:srcCompat="@drawable/equipment_violation"
+                    android:contentDescription="@string/todo" />
+
+                <ImageView
+                    android:id="@+id/utensil_image"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginLeft="15dp"
+                    app:layout_constraintBottom_toBottomOf="@id/equipment_image"
+                    app:layout_constraintStart_toEndOf="@id/equipment_image"
+                    app:layout_constraintTop_toTopOf="@id/equipment_image"
+                    app:srcCompat="@drawable/utensil_violation"
+                    android:contentDescription="@string/todo" />
+
+                <ImageView
+                    android:id="@+id/food_image"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginLeft="15dp"
+                    app:layout_constraintBottom_toBottomOf="@id/utensil_image"
+                    app:layout_constraintStart_toEndOf="@id/utensil_image"
+                    app:layout_constraintTop_toTopOf="@id/utensil_image"
+                    app:srcCompat="@drawable/food_violation"
+                    android:contentDescription="@string/todo" />
+
+                <ImageView
+                    android:id="@+id/pest_image"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginLeft="15dp"
+                    app:layout_constraintBottom_toBottomOf="@id/food_image"
+                    app:layout_constraintStart_toEndOf="@id/food_image"
+                    app:layout_constraintTop_toTopOf="@id/food_image"
+                    app:srcCompat="@drawable/pest_violation"
+                    android:contentDescription="@string/todo" />
+
+                <ImageView
+                    android:id="@+id/employee_image"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginLeft="15dp"
+                    app:layout_constraintBottom_toBottomOf="@id/pest_image"
+                    app:layout_constraintStart_toEndOf="@id/pest_image"
+                    app:layout_constraintTop_toTopOf="@id/pest_image"
+                    app:srcCompat="@drawable/employee_violation"
+                    android:contentDescription="@string/todo" />
+
+                <TextView
+                    android:id="@+id/violation_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/InspectionApter_violation"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/numViolations_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginLeft="2dp"
+                    android:text=""
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@id/violation_title"
+                    app:layout_constraintStart_toEndOf="@id/violation_title"
+                    app:layout_constraintTop_toTopOf="@id/violation_title"/>
+
+                <TextView
+                    android:id="@+id/problem_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="19dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="40dp"
+                    android:text="@string/InspectionApter_description_testing_text"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/violation_title" />
+
+                <ImageView
+                    android:id="@+id/isCritical_imageView"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginLeft="5dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/critical_textView"
+                    app:layout_constraintStart_toEndOf="@+id/critical_textView"
+                    app:layout_constraintTop_toTopOf="@+id/critical_textView"
+                    app:srcCompat="@drawable/hazard_level"
+                    android:contentDescription="@string/todo" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+
+    <color name="item_red">#FF0000</color>
+    <color name="item_green">#00FF00</color>
+    <color name="item_yellow">#FFFF00</color>
+    <color name="white">#FFFFFF</color>
+
+    <color name="white_bg">#FAFAFA</color>
+
+    <color name="black_overlay">#66000000</color>
+    <color name="inspection_activity_color_red">#FF0000</color>
+    <color name="inspection_activity_color_yellow">#FFC107</color>
+    <color name="inspection_activity_color_green">#4CAF50</color>
+
+    <color name="lavender">#E6E6FA</color>
+</resources>
