@@ -8,9 +8,10 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.cmpt276project.model.Inspection;
-import com.example.cmpt276project.model.RestaurantDao;
-import com.example.cmpt276project.model.RestaurantDataBase;
+import com.example.cmpt276project.model.dao.InspectionDao;
+import com.example.cmpt276project.model.MainDataBase;
 import com.example.cmpt276project.model.Violation;
+import com.example.cmpt276project.model.dao.ViolationDao;
 
 import java.util.List;
 
@@ -23,7 +24,8 @@ public class InspectionViewModel extends AndroidViewModel {
 
     private FetchViolationsFromDataBase fetchViolationsFromDataBase;
 
-    private RestaurantDao dao = RestaurantDataBase.getInstance(getApplication()).restaurantDao();
+    private InspectionDao inspectionDao = MainDataBase.getInstance(getApplication()).inspectionDao();
+    private ViolationDao violationDao = MainDataBase.getInstance(getApplication()).violationDao();
 
     public InspectionViewModel(@NonNull Application application) {
         super(application);
@@ -37,8 +39,8 @@ public class InspectionViewModel extends AndroidViewModel {
     private void fetchViolation(long inspectionId){
 
         Log.e(TAG, "inspectionId == " + inspectionId);
-        Inspection _inspection = dao.getAInspection(inspectionId);
-        List<Violation> _violations = dao.getViolationsOfOneInspection(inspectionId);
+        Inspection _inspection = inspectionDao.getAInspection(inspectionId);
+        List<Violation> _violations = violationDao.getViolationsOfOneInspection(inspectionId);
         inspection.postValue(_inspection);
         violationList.postValue(_violations);
         Log.e(TAG, _inspection.toString());

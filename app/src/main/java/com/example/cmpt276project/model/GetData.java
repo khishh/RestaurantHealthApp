@@ -35,16 +35,14 @@ public class GetData {
             while (((line = reader.readLine())!=null)) {
 
                 String[] tokens = line.split(",");
-//                Log.d(TAG, Arrays.toString(tokens));
                 Restaurant restaurant = new Restaurant();
                 restaurant.setTrackingNumber(tokens[0]);
                 restaurant.setName(tokens[1].substring(1, tokens[1].length()-1));
                 restaurant.setAddress(tokens[2].substring(1, tokens[2].length()-1));
                 restaurant.setLatitude(Double.parseDouble(tokens[5]));
                 restaurant.setLongitude(Double.parseDouble(tokens[6]));
+                restaurant.setFav(false);
                 List<Inspection> inspectionList = readInspection(tokens[0]);
-
-//                // sort
                 restaurant.setInspection(inspectionList);
 
                 restaurant.computeLastInspectionDate();

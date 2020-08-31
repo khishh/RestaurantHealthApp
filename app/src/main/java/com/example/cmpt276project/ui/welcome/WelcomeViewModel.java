@@ -10,10 +10,11 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.cmpt276project.R;
 import com.example.cmpt276project.model.GetData;
 import com.example.cmpt276project.model.Inspection;
+import com.example.cmpt276project.model.MainDataBase;
+import com.example.cmpt276project.model.dao.InspectionDao;
 import com.example.cmpt276project.model.Restaurant;
-import com.example.cmpt276project.model.RestaurantDao;
-import com.example.cmpt276project.model.RestaurantDataBase;
-import com.example.cmpt276project.model.Violation;
+import com.example.cmpt276project.model.dao.RestaurantDao;
+import com.example.cmpt276project.model.dao.ViolationDao;
 import com.example.cmpt276project.util.SharedPreferencesHelper;
 
 import org.json.JSONException;
@@ -28,10 +29,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class WelcomeViewModel extends AndroidViewModel {
 
@@ -52,14 +54,10 @@ public class WelcomeViewModel extends AndroidViewModel {
     private boolean isInspectionReportUpdated;
 
     private String newUpdateRecord;
-
-    private List<Restaurant> restaurants;
+    private Set<String> favouriteRestaurantTrackingNumberSet = new HashSet<>();
 
     private MutableLiveData<Boolean> isRestaurantUpdateNeeded = new MutableLiveData<>();
     private MutableLiveData<Boolean> isInspectionUpdateNeeded = new MutableLiveData<>();
-//    private MutableLiveData<Boolean> isUpdateNeeded = new MutableLiveData<>();
-//    private MutableLiveData<Boolean> isRestaurantUpdateCompleted = new MutableLiveData<>();
-//    private MutableLiveData<Boolean> isInspectionUpdateCompleted = new MutableLiveData<>();
     private MutableLiveData<Boolean> isDownloadingFromRemote = new MutableLiveData<>();
     private MutableLiveData<Boolean> isSavingDataIntoDataBase = new MutableLiveData<>();
     private MutableLiveData<Boolean> isUpdateCompleted = new MutableLiveData<>();
@@ -71,7 +69,9 @@ public class WelcomeViewModel extends AndroidViewModel {
     private ClearDataBaseThread clearDataBaseThread;
 
     private SharedPreferencesHelper helper = SharedPreferencesHelper.getInstance(getApplication());
-    private RestaurantDao dao = RestaurantDataBase.getInstance(getApplication()).restaurantDao();
+    private RestaurantDao restaurantDao = MainDataBase.getInstance(getApplication()).restaurantDao();
+    private InspectionDao inspectionDao = MainDataBase.getInstance(getApplication()).inspectionDao();
+    private ViolationDao violationDao = MainDataBase.getInstance(getApplication()).violationDao();
 
     public WelcomeViewModel(@NonNull Application application) {
         super(application);
@@ -242,7 +242,7 @@ public class WelcomeViewModel extends AndroidViewModel {
 
         isSavingDataIntoDataBase.postValue(true);
 
-        List<Long> restaurantIds = dao.insertRestaurant(restaurants);
+        List<Long> restaurantIds = restaurantDao.insertRestaurant(restaurants);
 
         // id version -- works but takes great amount of time
         for(int i = 0; i < restaurants.size(); i++){
@@ -250,14 +250,14 @@ public class WelcomeViewModel extends AndroidViewModel {
                 _inspection.setOwnerRestaurantId(restaurantIds.get(i));
             }
 
-            List<Long> inspectionIds = dao.insertInspection(restaurants.get(i).getInspection());
+            List<Long> inspectionIds = inspectionDao.insertInspection(restaurants.get(i).getInspection());
             for(int j = 0; j < restaurants.get(i).getInspection().size(); j++){
                 Inspection _inspection = restaurants.get(i).getInspection().get(j);
                 for(int k = 0; k < _inspection.getViolations().size(); k++){
                     _inspection.getViolations().get(k).setOwnerInspectionId(inspectionIds.get(j));
                 }
                 // insert violations into database
-                dao.insertViolation(_inspection.getViolations());
+                violationDao.insertViolation(_inspection.getViolations());
             }
         }
 
@@ -298,7 +298,7 @@ public class WelcomeViewModel extends AndroidViewModel {
             List<Restaurant> initialRestaurants = dataProcessing.read();
              */
 
-            restaurants = readLocalCSV();
+            List<Restaurant> restaurants = readLocalCSV();
             saveDataIntoDataBase(restaurants);
 
             /*
@@ -354,12 +354,13 @@ public class WelcomeViewModel extends AndroidViewModel {
         }
     }
 
-    private void readRemoteCSVs(){
+    private List<Restaurant> readRemoteCSVs(){
 
         isDownloadingFromRemote.postValue(true);
 
         URL url_restaurant = null;
         URL url_inspection = null;
+        List<Restaurant> restaurants = new ArrayList<>();
 
         try{
             url_restaurant = new URL(RESTAURANT_CSV_REMOTE_PATH);
@@ -374,7 +375,6 @@ public class WelcomeViewModel extends AndroidViewModel {
             URLConnection connection_restaurant = url_restaurant.openConnection();
             URLConnection connection_inspection = url_inspection.openConnection();
 
-            restaurants = new ArrayList<>();
             BufferedReader br = new BufferedReader(new InputStreamReader(connection_restaurant.getInputStream()));
             String line = br.readLine();
             while((line = br.readLine()) != null){
@@ -387,6 +387,14 @@ public class WelcomeViewModel extends AndroidViewModel {
 //                System.out.println(tokens[5] + " " + tokens[6]);
                 restaurant.setLatitude(Double.parseDouble(tokens[5]));
                 restaurant.setLongitude(Double.parseDouble(tokens[6]));
+
+                if(favouriteRestaurantTrackingNumberSet.contains(tokens[0])){
+                    restaurant.setFav(true);
+                }
+                else {
+                    restaurant.setFav(false);
+                }
+
                 restaurants.add(restaurant);
             }
             br.close();
@@ -441,13 +449,14 @@ public class WelcomeViewModel extends AndroidViewModel {
 
         Log.e(TAG, "Fetch finished!!");
 
+        return restaurants;
     }
 
     private class LoadRemoteCSVThread extends Thread{
 
         @Override
         public void run() {
-            readRemoteCSVs();
+            List<Restaurant> restaurants = readRemoteCSVs();
             saveDataIntoDataBase(restaurants);
             isUpdateCompleted.postValue(true);
         }
@@ -457,11 +466,16 @@ public class WelcomeViewModel extends AndroidViewModel {
 
         @Override
         public void run() {
-            dao.deleteAllRestaurant();
-            dao.deleteAllInspection();
-            dao.deleteAllViolation();
+            List<Restaurant> favouriteRestaurantList = restaurantDao.getAllFavRestaurant(true);
+            for(Restaurant restaurant : favouriteRestaurantList){
+                favouriteRestaurantTrackingNumberSet.add(restaurant.getTrackingNumber());
+            }
+            restaurantDao.deleteAllRestaurant();
+            inspectionDao.deleteAllInspection();
+            violationDao.deleteAllViolation();
         }
     }
+
 
     @Override
     protected void onCleared() {

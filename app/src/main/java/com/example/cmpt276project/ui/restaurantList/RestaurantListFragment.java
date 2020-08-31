@@ -119,6 +119,11 @@ public class RestaurantListFragment extends Fragment {
         public void onClick(long restaurantId) {
             ((RestaurantsListActivity) getActivity()).moveToRestaurantDetailActivity(restaurantId);
         }
+
+        @Override
+        public void onIsFavChanged(long restaurantId, boolean curIsFav) {
+            viewModel.updateIsFavouriteInDataBase(restaurantId, curIsFav);
+        }
     };
 
 }

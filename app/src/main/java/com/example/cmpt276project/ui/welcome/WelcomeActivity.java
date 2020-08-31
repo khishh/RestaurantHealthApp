@@ -34,8 +34,8 @@ public class WelcomeActivity extends AppCompatActivity
     private DownloadDialog downloadDialog;
     private SaveDBDialog saveDBDialog;
 
-    // 20 hours
-    private final static long refreshTime = 20 * 60 * 60 * 1000L;
+    // 20 hours 20 * 60 * 60 * 1000L
+    private final static long refreshTime = 5 * 60 * 1000L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

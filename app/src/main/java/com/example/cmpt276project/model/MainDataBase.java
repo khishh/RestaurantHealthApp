@@ -7,20 +7,23 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
+import com.example.cmpt276project.model.dao.InspectionDao;
+import com.example.cmpt276project.model.dao.RestaurantDao;
+import com.example.cmpt276project.model.dao.ViolationDao;
 import com.example.cmpt276project.util.Converters;
 
 @Database( entities = {Restaurant.class, Inspection.class, Violation.class}, version = 1)
 @TypeConverters({Converters.class})
-public abstract class RestaurantDataBase extends RoomDatabase {
+public abstract class MainDataBase extends RoomDatabase {
 
-    private static RestaurantDataBase instance;
+    private static MainDataBase instance;
 
-    public static RestaurantDataBase getInstance(Context context){
+    public static MainDataBase getInstance(Context context){
 
         if(instance == null){
             instance = Room.databaseBuilder(
                     context.getApplicationContext(),
-                    RestaurantDataBase.class,
+                    MainDataBase.class,
                     "restaurant_database"
             ).build();
         }
@@ -29,4 +32,8 @@ public abstract class RestaurantDataBase extends RoomDatabase {
     }
 
     public abstract RestaurantDao restaurantDao();
+
+    public abstract InspectionDao inspectionDao();
+
+    public abstract ViolationDao violationDao();
 }

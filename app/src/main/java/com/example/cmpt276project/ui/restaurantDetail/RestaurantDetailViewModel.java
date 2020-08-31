@@ -7,9 +7,10 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.cmpt276project.model.Inspection;
+import com.example.cmpt276project.model.dao.InspectionDao;
 import com.example.cmpt276project.model.Restaurant;
-import com.example.cmpt276project.model.RestaurantDao;
-import com.example.cmpt276project.model.RestaurantDataBase;
+import com.example.cmpt276project.model.dao.RestaurantDao;
+import com.example.cmpt276project.model.MainDataBase;
 
 import java.util.List;
 
@@ -20,7 +21,8 @@ public class RestaurantDetailViewModel extends AndroidViewModel {
 
     private FetchInspectionsFromDataBaseThread fromDataBaseThread;
 
-    private RestaurantDao dao = RestaurantDataBase.getInstance(getApplication()).restaurantDao();
+    private RestaurantDao restaurantDao = MainDataBase.getInstance(getApplication()).restaurantDao();
+    private InspectionDao inspectionDao = MainDataBase.getInstance(getApplication()).inspectionDao();
 
     public RestaurantDetailViewModel(@NonNull Application application) {
         super(application);
@@ -32,8 +34,8 @@ public class RestaurantDetailViewModel extends AndroidViewModel {
     }
 
     private void fetchInspection(long restaurantId){
-        Restaurant _restaurant = dao.getRestaurant(restaurantId);
-        List<Inspection> _inspections = dao.getInspectionsOfOneRestaurant(restaurantId);
+        Restaurant _restaurant = restaurantDao.getRestaurant(restaurantId);
+        List<Inspection> _inspections = inspectionDao.getInspectionsOfOneRestaurant(restaurantId);
 
         restaurant.postValue(_restaurant);
         inspectionList.postValue(_inspections);

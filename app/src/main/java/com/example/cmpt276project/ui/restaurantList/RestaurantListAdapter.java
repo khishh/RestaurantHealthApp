@@ -36,7 +36,8 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
     private Listener listener;
 
     interface Listener{
-        void onClick(long position);
+        void onClick(long restaurantId);
+        void onIsFavChanged(long restaurantId, boolean curIsFav);
     }
 
     public void setListener(Listener listener){
@@ -86,11 +87,35 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
             }
         }
 
+        if(restaurant.isFav()){
+            holder.binding.favorite.setImageResource(R.drawable.ic_baseline_star_24);
+        }
+        else{
+            holder.binding.favorite.setImageResource(R.drawable.ic_baseline_star_border_24);
+        }
+
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(listener != null){
                     listener.onClick(restaurant.getRestaurantId());
+                }
+            }
+        });
+
+        holder.binding.favorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(listener != null){
+                    listener.onIsFavChanged(restaurant.getRestaurantId(), restaurant.isFav());
+                }
+                if(restaurant.isFav()){
+                    holder.binding.favorite.setImageResource(R.drawable.ic_baseline_star_border_24);
+                    restaurant.setFav(false);
+                }
+                else{
+                    holder.binding.favorite.setImageResource(R.drawable.ic_baseline_star_24);
+                    restaurant.setFav(true);
                 }
             }
         });

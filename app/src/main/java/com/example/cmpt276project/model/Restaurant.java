@@ -26,6 +26,7 @@ public class Restaurant {
     private int totalNumIssues = 0;
     private String hazardLevelColor;
     private String lastInspectionDateFormatted;
+    private boolean isFav;
 
     @Ignore
     private List<Inspection> inspection;
@@ -103,10 +104,15 @@ public class Restaurant {
     }
 
     public int getTotalNumIssues() {
-//        if(totalNumIssues == 0){
-//            computeTotalNumIssues();
-//        }
         return totalNumIssues;
+    }
+
+    public boolean isFav() {
+        return isFav;
+    }
+
+    public void setFav(boolean fav) {
+        isFav = fav;
     }
 
     public void computeTotalNumIssues() {
@@ -176,7 +182,8 @@ public class Restaurant {
         return "Restaurant{" +
                 "restaurantId=" + restaurantId +
                 ", trackingNumber='" + trackingNumber + '\'' +
-                ", name='" + name + '\'' +
+                ", name='" + name + '\''+
+                ", isFav=" + isFav + '\'' +
                 ", address='" + address + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +

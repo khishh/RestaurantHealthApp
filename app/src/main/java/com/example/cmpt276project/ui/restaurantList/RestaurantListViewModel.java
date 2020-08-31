@@ -1,15 +1,15 @@
 package com.example.cmpt276project.ui.restaurantList;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.cmpt276project.model.Restaurant;
-import com.example.cmpt276project.model.RestaurantDao;
-import com.example.cmpt276project.model.RestaurantDataBase;
-import com.google.android.gms.maps.model.LatLng;
+import com.example.cmpt276project.model.dao.RestaurantDao;
+import com.example.cmpt276project.model.MainDataBase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +19,7 @@ import java.util.Objects;
 
 public class RestaurantListViewModel extends AndroidViewModel {
 
+    private static final String TAG = RestaurantListViewModel.class.getSimpleName();
     private static final String DEFAULT_QUERY = "";
     private static final String DEFAULT_COLOR = "All";
     private static final boolean DEFAULT_IS_FAV = false;
@@ -29,12 +30,13 @@ public class RestaurantListViewModel extends AndroidViewModel {
     private MutableLiveData<Restaurant> restaurantLastVisited = new MutableLiveData<>();
     private MutableLiveData<HashMap<String, Long>> restaurantNameIdMap = new MutableLiveData<>();
 
-    private RestaurantDao dao = RestaurantDataBase.getInstance(getApplication()).restaurantDao();
+    private RestaurantDao dao = MainDataBase.getInstance(getApplication()).restaurantDao();
 
 //    private FetchRestaurantDataFromDataBaseThread fetchRestaurantDataFromDataBaseThread;
     private FetchOneRestaurantByIdThread fetchOneRestaurantByIdThread;
     private FetchFilteredRestaurantThread fetchFilteredRestaurantThread;
     private FetchAllRestaurantNames fetchAllRestaurantNames;
+    private UpdateIsFavouriteThread updateIsFavouriteThread;
 
     public RestaurantListViewModel(@NonNull Application application) {
         super(application);
@@ -67,6 +69,20 @@ public class RestaurantListViewModel extends AndroidViewModel {
         fetchAllRestaurantNames.start();
     }
 
+    private void updateIsFavourite(long restaurantId, boolean isFav){
+        Restaurant target = dao.getRestaurant(restaurantId);
+        target.setFav(!isFav);
+        dao.updateRestaurant(target);
+        // Test
+        target = dao.getRestaurant(restaurantId);
+        Log.e(TAG, target.toString());
+    }
+
+    public void updateIsFavouriteInDataBase(long restaurantId, boolean isFav){
+        updateIsFavouriteThread = new UpdateIsFavouriteThread(restaurantId, isFav);
+        updateIsFavouriteThread.start();
+    }
+
     private void fetchRestaurantByFilters(String query, String hazardLevelColor, boolean isFavourite, int min, int max){
 
         List<Restaurant> restaurant = new ArrayList<>();
@@ -78,10 +94,27 @@ public class RestaurantListViewModel extends AndroidViewModel {
             if(hazardLevelColor.equals(DEFAULT_COLOR)){
                 hazardLevelColor = "";
             }
-            restaurant = dao.getFilteredRestaurant(min, max, query, hazardLevelColor);
+            restaurant = dao.getFilteredRestaurant(min, max, query, hazardLevelColor, isFavourite);
+
+
         }
 
         restaurantList.postValue(restaurant);
+    }
+
+    private class UpdateIsFavouriteThread extends Thread{
+        long restaurantId;
+        boolean isFav;
+
+        public UpdateIsFavouriteThread(long restaurantId, boolean isFav){
+            this.restaurantId = restaurantId;
+            this.isFav = isFav;
+        }
+
+        @Override
+        public void run() {
+            updateIsFavourite(restaurantId, isFav);
+        }
     }
 
     private class FetchOneRestaurantByIdThread extends Thread{
