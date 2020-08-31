@@ -163,6 +163,9 @@
     <string name="violation_message_s1">Single use containers &amp; utensils are used more than once [s. 20]</string>
     <!--Other-->
     <string name="menu_switch" translatable="false">switch</string>
+    <string name="no_restaurants_found_msg">No Restaurants Found</string>
+    <string name="no_inspections_found_msg">No Inspections Found</string>
+    <string name="no_violations_found_msg">No Violations Found</string>
 
     <array name="spinner_color">
         <item>All</item>

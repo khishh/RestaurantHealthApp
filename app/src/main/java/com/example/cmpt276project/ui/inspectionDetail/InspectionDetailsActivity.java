@@ -30,6 +30,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -101,9 +102,19 @@ public class InspectionDetailsActivity extends AppCompatActivity {
         viewModel.getViolationList().observe(this, new Observer<List<Violation>>() {
             @Override
             public void onChanged(List<Violation> violations) {
+                setVisibilityOfNoViolationMsg(violations.size() == 0);
                 inspectionAdapter.updateViolations(violations);
             }
         });
+    }
+
+    private void setVisibilityOfNoViolationMsg(boolean isEmpty){
+        if(isEmpty){
+            binding.noViolationMsg.setVisibility(View.VISIBLE);
+        }
+        else{
+            binding.noViolationMsg.setVisibility(View.GONE);
+        }
     }
 
     // Set the RecyclerView

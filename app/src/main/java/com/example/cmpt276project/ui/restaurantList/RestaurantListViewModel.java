@@ -32,7 +32,6 @@ public class RestaurantListViewModel extends AndroidViewModel {
 
     private RestaurantDao dao = MainDataBase.getInstance(getApplication()).restaurantDao();
 
-//    private FetchRestaurantDataFromDataBaseThread fetchRestaurantDataFromDataBaseThread;
     private FetchOneRestaurantByIdThread fetchOneRestaurantByIdThread;
     private FetchFilteredRestaurantThread fetchFilteredRestaurantThread;
     private FetchAllRestaurantNames fetchAllRestaurantNames;
@@ -41,16 +40,6 @@ public class RestaurantListViewModel extends AndroidViewModel {
     public RestaurantListViewModel(@NonNull Application application) {
         super(application);
     }
-
-//    public void loadRestaurant(){
-//        fetchRestaurantDataFromDataBaseThread = new FetchRestaurantDataFromDataBaseThread();
-//        fetchRestaurantDataFromDataBaseThread.start();
-//    }
-
-//    private void fetchRestaurant(){
-//        List<Restaurant> restaurants = dao.getAllRestaurants();
-//        restaurantList.postValue(restaurants);
-//    }
 
     public void fetchOneRestaurantById(long restaurantId) {
         fetchOneRestaurantByIdThread = new FetchOneRestaurantByIdThread(restaurantId);

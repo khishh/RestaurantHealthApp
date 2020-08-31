@@ -97,8 +97,7 @@
             app:layout_constraintTop_toTopOf="@+id/GPSView"
             android:setGPS="@{restaurant}"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/InspectionView"
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="10dp"
@@ -109,7 +108,27 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/RecentInspectionView" />
+            app:layout_constraintTop_toBottomOf="@+id/RecentInspectionView">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/InspectionView"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                />
+
+            <TextView
+                android:id="@+id/no_inspection_msg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/no_inspections_found_msg"
+                android:gravity="center"
+                android:textSize="26sp"
+                android:visibility="gone"
+                />
+
+        </RelativeLayout>
+
+
 
         <TextView
             android:id="@+id/RecentInspectionView"

@@ -80,9 +80,18 @@ public class RestaurantListFragment extends Fragment {
             @Override
             public void onChanged(List<Restaurant> restaurantList) {
                 Log.e(TAG, "restaurant updated!!");
+                setVisibilityOfNoRestaurantMsg(restaurantList.size() == 0);
                 adapter.updateRestaurant(restaurantList);
             }
         });
+    }
+
+    private void setVisibilityOfNoRestaurantMsg(boolean isEmpty){
+        if (isEmpty) {
+            binding.noRestaurantMsg.setVisibility(View.VISIBLE);
+        } else {
+            binding.noRestaurantMsg.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -101,6 +110,10 @@ public class RestaurantListFragment extends Fragment {
 //        binding.listRecyclerView.addItemDecoration(dividerItemDecoration);
         binding.listRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.listRecyclerView.setAdapter(adapter);
+
+        if(adapter.getItemCount() == 0){
+            binding.noRestaurantMsg.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

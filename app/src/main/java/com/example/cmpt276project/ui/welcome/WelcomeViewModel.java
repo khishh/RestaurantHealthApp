@@ -8,7 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.cmpt276project.R;
-import com.example.cmpt276project.model.GetData;
+import com.example.cmpt276project.model.LoadLocalCSV;
 import com.example.cmpt276project.model.Inspection;
 import com.example.cmpt276project.model.MainDataBase;
 import com.example.cmpt276project.model.dao.InspectionDao;
@@ -232,7 +232,7 @@ public class WelcomeViewModel extends AndroidViewModel {
         InputStream restaurantSrc = getApplication().getResources().openRawResource(R.raw.restaurants);
         InputStream inspectionSrc = getApplication().getResources().openRawResource(R.raw.inspectionreports);
 
-        GetData dataProcessing = new GetData(restaurantSrc,inspectionSrc);
+        LoadLocalCSV dataProcessing = new LoadLocalCSV(restaurantSrc,inspectionSrc);
         List<Restaurant> restaurants = dataProcessing.read();
         return restaurants;
     }

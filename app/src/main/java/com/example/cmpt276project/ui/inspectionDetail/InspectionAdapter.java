@@ -38,11 +38,6 @@ import java.util.List;
 // InspectionAdapter Class
 public class InspectionAdapter extends RecyclerView.Adapter<InspectionAdapter.InspectionViewHolder> {
 
-//    private boolean[] allCritical;
-////    private int[][] allNatures;
-////    private String[] allShortDescriptions;
-////    private String[] allLongDescriptions;
-
     private List<Violation> violationList;
     private int[] images;
 

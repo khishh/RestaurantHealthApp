@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -69,10 +70,20 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         viewModel.getInspectionList().observe(this, new Observer<List<Inspection>>() {
             @Override
             public void onChanged(List<Inspection> inspections) {
+                setVisibilityOfNoInspectionMsg(inspections.size() == 0);
                 adapter.updateInspections(inspections);
             }
         });
 
+    }
+
+    private void setVisibilityOfNoInspectionMsg(boolean isEmpty){
+        if(isEmpty){
+            binding.noInspectionMsg.setVisibility(View.VISIBLE);
+        }
+        else{
+            binding.noInspectionMsg.setVisibility(View.GONE);
+        }
     }
 
     private void initializeRecyclerView() {

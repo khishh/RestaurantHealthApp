@@ -17,8 +17,7 @@
         android:layout_height="match_parent"
         tools:context=".ui.inspectionDetail.InspectionDetailsActivity">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/inspection_RecycleView"
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="10dp"
@@ -30,7 +29,26 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView5" />
+            app:layout_constraintTop_toBottomOf="@+id/textView5">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/inspection_RecycleView"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                />
+
+            <TextView
+                android:id="@+id/no_violation_msg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/no_violations_found_msg"
+                android:textSize="26sp"
+                android:gravity="center"
+                android:visibility="gone"/>
+
+
+        </RelativeLayout>
+
 
         <TextView
             android:id="@+id/title"

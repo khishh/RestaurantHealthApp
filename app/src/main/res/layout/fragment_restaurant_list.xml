@@ -5,12 +5,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list_recycler_view"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="5dp" />
+        android:layout_height="match_parent">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp" />
+
+        <TextView
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:id="@+id/no_restaurant_msg"
+            android:text="@string/no_restaurants_found_msg"
+            android:textSize="26sp"
+            android:visibility="gone"
+            />
+
+    </RelativeLayout>
 
 </layout>

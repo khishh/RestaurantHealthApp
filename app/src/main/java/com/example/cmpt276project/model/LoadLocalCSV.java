@@ -13,14 +13,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 //Desc: Get the data from the input file to store in the list of restaurant
-public class GetData {
+public class LoadLocalCSV {
 
     private static final String TAG = "GetData";
 
     InputStream restaurant;
     InputStream inspection;
 
-    public GetData(InputStream restaurant, InputStream inspection){
+    public LoadLocalCSV(InputStream restaurant, InputStream inspection){
         this.restaurant = restaurant;
         this.inspection = inspection;
     }
@@ -101,11 +101,6 @@ public class GetData {
                 return o2.getInspectionDate().compareTo(o1.getInspectionDate());
             }
         });
-
-
-//        for(Inspection inspection : inspections){
-//            Log.e(TAG, inspection.getInspectionDate().toString());
-//        }
 
         inspection.reset();
         return inspections;
