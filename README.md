@@ -2,9 +2,9 @@
 This project was originally a group project in the software engineering course. I worked in a group of 4 people for 3 iterations (each iteration is 2 weeks), adopting Scrum process. I played roles in Product owner, Team member, and Scrum master in each iteration.
 Since we did not take Android Architecture into consideration at that time, this is the version after I made various modifications to the original project. Hopefully, this would show my understanding of MVVM, one of major Android Architectures.
 
-This app shows the hygiene of local restaurants in Surrey (a city close to Vancouver in Canada) based on the open-source data available in https://data.surrey.ca/. Each restaurant has a record of helth inspections and each inspection is evaluated by a hazard level(Low, Moderate, or High) depending on the issues found at that time. With this app, users can easily check the hygienic status of various local restaurants and enhance the awareness of their food safety in their neighborhood.
+This app shows the hygiene of local restaurants in Surrey (a city close to Vancouver in Canada) based on the open-source data available in https://data.surrey.ca/. Each restaurant has a record of helth inspections and each inspection is evaluated by a hazard level(Low, Moderate, or High) depending on the nature and the number of violations found at that time. With this app, users can easily check the hygienic status of various local restaurants and enhance the awareness of their food safety in their neighborhood.
 
-# Each State of this app
+## Each State of this app
 
 1. WelcomeActivity
 
@@ -47,4 +47,17 @@ ListFragment
 
 ![](FraserHealthApp_Screenshots/inspection_details.png)
 
+  - display all violations of a specific inspection
+  - user can see more details of a violation by clicking on each row
+  
+## How to use this app
 
+Since this application uses Google Map and Places API, you will need to get your own API key to experience the full functionality of this app. Once you issued youw own API key, search for google_maps_api.xml and paste your key inside a string resource.
+
+## Library reference resources:
+
+1. RxJava2: https://github.com/amitshekhariitbhu/RxJava2-Android-Samples
+2. Room: https://developer.android.com/topic/libraries/architecture/room.html
+3. Google Map and Places: https://developers.google.com/maps/documentation
+4. Restaurants: http://data.surrey.ca/dataset/restaurants
+5. Fraser Health Restaurant Inspection Reports: https://data.surrey.ca/dataset/fraser-health-restaurant-inspection-reports 
