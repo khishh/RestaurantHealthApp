@@ -1,4 +1,4 @@
-package com.example.cmpt276project.model.dao;
+package com.example.cmpt276project.model.database.dao;
 
 import androidx.room.Dao;
 import androidx.room.Insert;

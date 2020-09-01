@@ -8,10 +8,10 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.cmpt276project.model.Inspection;
-import com.example.cmpt276project.model.dao.InspectionDao;
-import com.example.cmpt276project.model.MainDataBase;
+import com.example.cmpt276project.model.database.dao.InspectionDao;
+import com.example.cmpt276project.model.database.dao.MainDataBase;
 import com.example.cmpt276project.model.Violation;
-import com.example.cmpt276project.model.dao.ViolationDao;
+import com.example.cmpt276project.model.database.dao.ViolationDao;
 
 import java.util.List;
 

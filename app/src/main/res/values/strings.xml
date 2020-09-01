@@ -115,7 +115,7 @@
     <string name="restaurant_map_fragment_hazard_level">Hazard Level</string>
     <string name="restaurant_map_fragment_multi_restaurants_message">Multiple Restaurant found at this address</string>
     <string name="restaurant_map_fragment_location_permission_needed">Location Permission Needed</string>
-    <string name="restaurant_map_fragment_location_permission_message">This app needs the Location permission, please accept to use location functionality</string>
+    <string name="restaurant_map_fragment_location_permission_message">This app needs the Location permission to show restaurants around your location, please consider accepting to use location functionality</string>
     <string name="restaurant_map_fragment_yes">Yes</string>
     <string name="restaurant_map_fragment_current_position">Current Position</string>
     <!--ChooseOneRestaurantDialog-->

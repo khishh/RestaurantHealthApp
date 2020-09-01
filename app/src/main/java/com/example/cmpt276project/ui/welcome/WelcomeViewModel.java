@@ -10,11 +10,11 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.cmpt276project.R;
 import com.example.cmpt276project.model.LoadLocalCSV;
 import com.example.cmpt276project.model.Inspection;
-import com.example.cmpt276project.model.MainDataBase;
-import com.example.cmpt276project.model.dao.InspectionDao;
+import com.example.cmpt276project.model.database.dao.MainDataBase;
+import com.example.cmpt276project.model.database.dao.InspectionDao;
 import com.example.cmpt276project.model.Restaurant;
-import com.example.cmpt276project.model.dao.RestaurantDao;
-import com.example.cmpt276project.model.dao.ViolationDao;
+import com.example.cmpt276project.model.database.dao.RestaurantDao;
+import com.example.cmpt276project.model.database.dao.ViolationDao;
 import com.example.cmpt276project.util.SharedPreferencesHelper;
 
 import org.json.JSONException;

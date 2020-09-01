@@ -5,10 +5,7 @@ import com.google.maps.android.clustering.ClusterItem;
 
 import androidx.annotation.Nullable;
 
-import com.example.cmpt276project.model.Inspection;
-import com.example.cmpt276project.model.RestaurantManager;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.maps.android.clustering.ClusterItem;
 
 public class ClusterItems implements ClusterItem {
 

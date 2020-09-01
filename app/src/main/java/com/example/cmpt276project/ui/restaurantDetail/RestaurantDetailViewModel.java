@@ -7,10 +7,10 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.cmpt276project.model.Inspection;
-import com.example.cmpt276project.model.dao.InspectionDao;
+import com.example.cmpt276project.model.database.dao.InspectionDao;
 import com.example.cmpt276project.model.Restaurant;
-import com.example.cmpt276project.model.dao.RestaurantDao;
-import com.example.cmpt276project.model.MainDataBase;
+import com.example.cmpt276project.model.database.dao.RestaurantDao;
+import com.example.cmpt276project.model.database.dao.MainDataBase;
 
 import java.util.List;
 

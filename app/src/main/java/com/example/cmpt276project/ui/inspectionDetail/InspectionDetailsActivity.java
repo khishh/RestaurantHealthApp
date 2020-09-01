@@ -28,7 +28,6 @@ package com.example.cmpt276project.ui.inspectionDetail;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -48,7 +47,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.cmpt276project.R;
 import com.example.cmpt276project.databinding.ActivityInspectionDetailsBinding;
 import com.example.cmpt276project.model.Inspection;
-import com.example.cmpt276project.model.RestaurantManager;
 import com.example.cmpt276project.model.Violation;
 
 import java.util.ArrayList;

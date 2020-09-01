@@ -8,8 +8,8 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.cmpt276project.model.Restaurant;
-import com.example.cmpt276project.model.dao.RestaurantDao;
-import com.example.cmpt276project.model.MainDataBase;
+import com.example.cmpt276project.model.database.dao.RestaurantDao;
+import com.example.cmpt276project.model.database.dao.MainDataBase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
