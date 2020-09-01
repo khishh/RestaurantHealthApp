@@ -10,7 +10,6 @@ This app shows the hygiene of local restaurants in Surrey (a city close to Vanco
 
 ![](FraserHealthApp_Screenshots/welcome.png)
 
-WelcomeActivity plays roles in
   - loading local CSV file and save data into database if the app launches for the first time
   - asking a user if they would like to check new data available in remote API
   - if a user answered no, starting next activity (RestaurantListActivity) immediately
@@ -19,7 +18,6 @@ WelcomeActivity plays roles in
  
 2. RestaurantListActivity
 
-RestaurantListActivity plays roles in
   - displaying either MapFragment or ListFragment at a time. Switched by the map/list icon on the toolbar.
   - allowing users to search restaurants with various requirements by clicking search icon on the toolbar.
   - starting the next Activity (RestaurantDetailActivity) if its child fragment requested
@@ -28,4 +26,17 @@ MapFragment
 
 ![](FraserHealthApp_Screenshots/map_fragment.png)
 
+  - showing all restaurants on the Map at the correct location. The LED icon's color corresponds to the hazardlevel of the most recent inspection.
+  - enabling users to show the list of inspections of a restaurant they clicked on its window in the next activity (RestaurantDetailsActivity).
+
+ListFragment
+
+![](FraserHealthApp_Screenshots/list_fragment.png)
+
+  - showing all restaurants in a recyclerview
+  - enabling users to click each row and show the list of inspections of that restaurant in the next activity (RestaurantDetailsActivity).
   
+3. RestaurantDetailActivity
+
+
+![](FraserHealthApp_Screenshots/restaurant_details.png)
