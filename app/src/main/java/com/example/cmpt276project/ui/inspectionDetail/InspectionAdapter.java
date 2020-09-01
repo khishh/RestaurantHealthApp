@@ -99,7 +99,7 @@ public class InspectionAdapter extends RecyclerView.Adapter<InspectionAdapter.In
         }
 
         // Set the Short Description TextView
-        holder.binding.problemList.setText(violation.getDescription());
+        holder.binding.problemList.setText(violation.getShortDescription());
 
         // Set each row of layout to make Toast
         holder.binding.violationConstraintLayout.setOnClickListener(new View.OnClickListener() {

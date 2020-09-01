@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "18a7dc1bda56a108b385b1d5539dda5a",
+    "identityHash": "801c3ec56004950abc965cc7c3742942",
     "entities": [
       {
         "tableName": "Restaurant",
@@ -154,7 +154,7 @@
       },
       {
         "tableName": "Violation",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`violationId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `ownerInspectionId` INTEGER NOT NULL, `description` TEXT, `criticality` TEXT, `nature` TEXT, `longDescription` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`violationId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `ownerInspectionId` INTEGER NOT NULL, `description` TEXT, `criticality` TEXT, `nature` TEXT, `longDescription` TEXT, `shortDescription` TEXT)",
         "fields": [
           {
             "fieldPath": "violationId",
@@ -191,6 +191,12 @@
             "columnName": "longDescription",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "shortDescription",
+            "columnName": "shortDescription",
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -206,7 +212,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '18a7dc1bda56a108b385b1d5539dda5a')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '801c3ec56004950abc965cc7c3742942')"
     ]
   }
 }

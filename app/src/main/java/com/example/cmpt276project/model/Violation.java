@@ -30,6 +30,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.example.cmpt276project.R;
+
 import java.util.Arrays;
 
 // Violation Class
@@ -44,6 +46,7 @@ public class Violation {
     // Constant
     public final static String[] CRITICALITY_KEYWORDS = {"critical", "not critical"};
     public final static String[] NATURE_KEYWORDS = {"equipment", "utensil", "food", "pest", "employee"};
+    public final static String[] NATURE_KEYWORDS_CAP = {"Equipment", "Utensil", "Food", "Pest", "Employee"};
     private final static int NUM_OF_COMMAS = 3;
 
     // fields
@@ -59,6 +62,7 @@ public class Violation {
     private Criticality criticality;
     private int[] nature;
     private String longDescription;
+    private String shortDescription;
 
     public Violation(){
     }
@@ -113,6 +117,7 @@ public class Violation {
         if(criticalityAnalysis(indexOfComma[0] + 1, indexOfComma[1] - 1)) {
             natureAnalysis(indexOfComma[1] + 1, indexOfComma[2] - 1);
             longDescriptionAnalysis(indexOfComma[1] + 1, indexOfComma[2] - 1);
+            shortDescriptionAnalysis();
         }
     }
 
@@ -120,6 +125,31 @@ public class Violation {
     private void longDescriptionAnalysis(int startIndex, int endIndex) {
         String substring = description.substring(startIndex, endIndex + 1);
         longDescription = substring;
+    }
+
+    // Violation Analysis
+    // Determines the shortDescription
+    private void shortDescriptionAnalysis() {
+
+        boolean allDoesNotExist = true;
+        String shortDescription = "";
+
+        for (int i = 0; i < nature.length; i++) {
+            if (nature[i] == 1) {
+                if (!allDoesNotExist) {
+                    shortDescription += "/";
+                }
+
+                shortDescription += NATURE_KEYWORDS_CAP[i];
+                allDoesNotExist = false;
+            }
+        }
+
+        if (allDoesNotExist)
+            shortDescription = "Other";
+
+        shortDescription += (" Issue");
+        this.shortDescription = shortDescription;
     }
 
     // Determine the Criticality
@@ -218,6 +248,14 @@ public class Violation {
         this.longDescription = longDescription;
     }
 
+    public String getShortDescription() {
+        return shortDescription;
+    }
+
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
+    }
+
     @Override
     public String toString() {
         return "Violation{" +
@@ -227,6 +265,7 @@ public class Violation {
                 ", criticality=" + criticality +
                 ", nature=" + Arrays.toString(nature) +
                 ", longDescription='" + longDescription + '\'' +
+                ", shortDescription='" + shortDescription + '\'' +
                 '}';
     }
 }
