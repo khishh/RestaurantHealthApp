@@ -267,6 +267,7 @@ public class RestaurantMapFragment extends Fragment {
     }
 
     private void setUpMap(){
+        Log.e(TAG, "setUpMap started");
         GoogleMapOptions options = new GoogleMapOptions();
         options.compassEnabled(true)
                 .zoomControlsEnabled(true)

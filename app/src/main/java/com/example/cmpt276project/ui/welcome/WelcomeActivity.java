@@ -76,12 +76,12 @@ public class WelcomeActivity extends AppCompatActivity
             viewModel.saveInitialDataSetIntoDataBase();
         }
         else if(is20hoursPassed()){
+            Log.e(TAG, "20hoursPassed");
             // ask users if they like to check any update on csv reports on remote
-            long currentMilliTime = System.currentTimeMillis();
-            helper.saveUpdateTime(currentMilliTime);
             showUpdateDialog();
         }
         else{
+            Log.e(TAG, "20hours not Passed");
             // if within 20 hours, no need to check updates. proceed to the next activity
             moveToRestaurantListActivity();
         }
@@ -186,6 +186,11 @@ public class WelcomeActivity extends AppCompatActivity
 
     private void showDownloadDialog(){
         if(downloadDialog == null){
+            // before starting downloading new data, update the lastUpdateTime in preferences.
+            long currentMilliTime = System.currentTimeMillis();
+            helper.saveUpdateTime(currentMilliTime);
+            Log.e(TAG, "saveUpdateTime == " + currentMilliTime);
+            
             downloadDialog = new DownloadDialog();
             downloadDialog.setCancelable(false);
             downloadDialog.show(getSupportFragmentManager(), "download_dialog");
