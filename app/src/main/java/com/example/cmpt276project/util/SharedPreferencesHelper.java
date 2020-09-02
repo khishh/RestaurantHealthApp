@@ -7,7 +7,7 @@ import android.preference.PreferenceManager;
 
 public class SharedPreferencesHelper {
 
-    private static final String PREF_TIME = "Pref_time";
+    private static final String LAST_LAUNCH_TIME = "last_launch_time";
     private static final String LAST_MODIFIED_DATE_RESTAURANT = "restaurant_update";
     private static final String LAST_MODIFIED_DATE_INSPECTION = "inspection_update";
     private static final String LAST_VISITED_RESTAURANT = "last_visited_restaurant";
@@ -29,14 +29,14 @@ public class SharedPreferencesHelper {
     }
 
     public void saveUpdateTime(long time){
-        preferences.edit().putLong(PREF_TIME, time).apply();
+        preferences.edit().putLong(LAST_LAUNCH_TIME, time).apply();
     }
 
-    public long getUpdateTime(){
-        return preferences.getLong(PREF_TIME, 0);
+    public long getLastLaunchTIme(){
+        return preferences.getLong(LAST_LAUNCH_TIME, 0);
     }
 
-    public void saveLastModifiedDateRestaurant(String newModifiedDate){
+    public void saveLastLaunchTime(String newModifiedDate){
         preferences.edit().putString(LAST_MODIFIED_DATE_RESTAURANT, newModifiedDate).apply();
     }
 
@@ -57,7 +57,7 @@ public class SharedPreferencesHelper {
     }
 
     public long getLastVisitedRestaurant(){
-        return preferences.getLong(LAST_VISITED_RESTAURANT, -1);
+        return preferences.getLong(LAST_VISITED_RESTAURANT, 0);
     }
 
     public void saveFilters(String query, String queryColor, Boolean isFav, int queryMin, int queryMax) {

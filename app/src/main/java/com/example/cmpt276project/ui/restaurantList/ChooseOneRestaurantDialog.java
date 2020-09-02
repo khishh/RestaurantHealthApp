@@ -22,7 +22,6 @@ public class ChooseOneRestaurantDialog extends AppCompatDialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-//        List<ClusterItems> list = new ArrayList<>(clickedCluster.getItems());
         List<String> strList = new ArrayList<>();
         for (ClusterItems item : list){
             String hazardLevel = item.getmHazardLevel();

@@ -1,11 +1,8 @@
 package com.example.cmpt276project.ui.restaurantDetail;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -13,20 +10,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cmpt276project.R;
 import com.example.cmpt276project.databinding.ListItemInspectionsBinding;
-import com.example.cmpt276project.databinding.ListItemViolationBinding;
 import com.example.cmpt276project.model.Inspection;
 
 import java.util.List;
 
-//This adapter handles the setup of the RestaurantDetailsActivity recyclerView and handles formating for the date in the recyclerView
+/**
+ * RecyclerView adapter for clusters in RestaurantDetailsActivity
+ */
+
 public class RestaurantDetailsAdapter extends RecyclerView.Adapter<RestaurantDetailsAdapter.ViewHolder> {
 
     private static final String TAG = "RestaurantDetailsAdapter";
 
     private List<Inspection> inspectionList;
     private InspectionAdapterItemClickListener inspectionAdapterItemClickListener;
-
-//    private ListItemInspectionsBinding binding;
 
     public RestaurantDetailsAdapter(List<Inspection> inspectionList, InspectionAdapterItemClickListener inspectionAdapterItemClickListener) {
         this.inspectionList = inspectionList;
@@ -42,7 +39,6 @@ public class RestaurantDetailsAdapter extends RecyclerView.Adapter<RestaurantDet
     @NonNull
     @Override
     public RestaurantDetailsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_inspections, parent, false);
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         ListItemInspectionsBinding binding = DataBindingUtil.inflate(inflater, R.layout.list_item_inspections, parent, false);
         return new ViewHolder(binding);

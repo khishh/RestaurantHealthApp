@@ -2,10 +2,12 @@ package com.example.cmpt276project.ui.restaurantList;
 
 import com.google.maps.android.clustering.ClusterItem;
 
-
 import androidx.annotation.Nullable;
 
 import com.google.android.gms.maps.model.LatLng;
+
+// reference
+// https://developers.google.com/maps/documentation/android-sdk/utility/marker-clustering
 
 public class ClusterItems implements ClusterItem {
 

@@ -60,17 +60,33 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * RestaurantMapFragment
+ *
+ * Prerequisite:
+ * Users need to grant a permission to access the current location.
+ *
+ * Displays all restaurants, meeting all user's filtering requirements, in Google Map at appropriate location.
+ * If one restaurant is close to other restaurants in Map, they will be shown as one cluster, a collection of neighbour restaurants.
+ *
+ * Users can click on the peg of each restaurant and start the next activity(RestaurantDetailActivity).
+ * When there are multiple restaurants at the same address, users can click on cluster to open ChooseOneRestaurantDialog,
+ * where they can select a restaurant.
+ *
+ * If a user come back to this activity from RestaurantDetailActivity by clicking its GPS coords text,
+ * that restaurant will be displayed at the center.
+ *
+ */
 
 public class RestaurantMapFragment extends Fragment {
 
     private static final String TAG = RestaurantMapFragment.class.getSimpleName();
-    private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
-    private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1337;
+    // the minimum number needed to be a cluster
     private static final int MINIMUM_CLUSTER_SIZE = 2;
-    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    private static final float GLOBAL_ZOOM = 15f;
-    private static final LatLng defaultLocation = new LatLng(49.14, -122.87);
+    // the default starting zoom level
+    private static final float GLOBAL_ZOOM = 14f;
+    // the default location (Surrey)
+    private static final LatLng defaultLocation = new LatLng(	49.104431, -122.87);
 
     private RestaurantListViewModel viewModel;
     private SharedPreferencesHelper helper;
@@ -82,22 +98,14 @@ public class RestaurantMapFragment extends Fragment {
     private Location mLocation;
     private LocationRequest mLocationRequest;
     private Marker mCurrLocationMarker;
-
     private LocationManager mLocationManager;
     private ClusterManager<ClusterItems> mClusterManager;
-
-    private Boolean locationPermissionGranted = false;
-    private long lastVisitedRestaurantId = -1;
-
     private Cluster<ClusterItems> clickedCluster;
 
-    private static final String KEY_SEARCH = "search";
-    private static final String KEY_COLOR = "color";
-    private static final String KEY_IS_FAV = "isFav";
+    private Boolean locationPermissionGranted = false;
+    private long lastVisitedRestaurantId;
+    private LatLng lastVisitedRestaurant;
 
-    private String userSearchInput;
-    private String userColorInput;
-    private boolean userIsFavInput;
 
     private LocationListener locationListener = new LocationListener() {
         @Override
@@ -143,13 +151,6 @@ public class RestaurantMapFragment extends Fragment {
         }
     };
 
-    public static RestaurantMapFragment newInstance() {
-        RestaurantMapFragment fragment = new RestaurantMapFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     private OnMapReadyCallback mapReadyCallback = new OnMapReadyCallback() {
 
         /**
@@ -170,6 +171,7 @@ public class RestaurantMapFragment extends Fragment {
             mLocationRequest.setFastestInterval(1000);
             mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
+            // if SDK is equal or higher than M, need to check permissions
             if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
                 if (ContextCompat.checkSelfPermission(getContext(),
                         Manifest.permission.ACCESS_FINE_LOCATION)
@@ -183,6 +185,7 @@ public class RestaurantMapFragment extends Fragment {
                     getLocationPermission();
                 }
             }
+            // no need to check a permission in older SDK
             else {
                 Log.d(TAG, "onMapReady: Already granted in old SDK");
                 locationPermissionGranted = true;
@@ -192,22 +195,37 @@ public class RestaurantMapFragment extends Fragment {
 
             updateLocationUI();
             setUpCluster();
-            getDeviceLocation();
 
+            if(lastVisitedRestaurantId == 0) {
+                getDeviceLocation();
+            }
+            else{
+                myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastVisitedRestaurant, GLOBAL_ZOOM));
+                return;
+            }
+
+            // codes below will set the current location of a user at the center of the map
             mLocationManager = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
             if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
+
             mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
         }
     };
+
+    public static RestaurantMapFragment newInstance() {
+        RestaurantMapFragment fragment = new RestaurantMapFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(Objects.requireNonNull(getContext()));
-        helper = SharedPreferencesHelper.getInstance(getContext());
     }
 
     @Nullable
@@ -216,7 +234,12 @@ public class RestaurantMapFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         viewModel = ViewModelProviders.of(requireActivity()).get(RestaurantListViewModel.class);
+        helper = SharedPreferencesHelper.getInstance(getContext());
+        // check if a user came back from clicking on  RestaurantDetailsActivity's GPS text
+        lastVisitedRestaurantId = helper.getLastVisitedRestaurant();
+        viewModel.fetchOneRestaurantById(lastVisitedRestaurantId);
         observeViewModel();
+
         return inflater.inflate(R.layout.fragment_restaurant_map, container, false);
     }
 
@@ -225,6 +248,7 @@ public class RestaurantMapFragment extends Fragment {
             @Override
             public void onChanged(List<Restaurant> restaurantList) {
                 Log.e(TAG, "restaurant updated!!");
+                // when the data is ready, set up Google Map
                 setUpMap();
             }
         });
@@ -232,9 +256,12 @@ public class RestaurantMapFragment extends Fragment {
         viewModel.getRestaurantLastVisited().observe(this, new Observer<Restaurant>() {
             @Override
             public void onChanged(Restaurant restaurant) {
-                moveCamera(new LatLng(restaurant.getLatitude(),
-                                restaurant.getLongitude()),
-                        GLOBAL_ZOOM);
+                if(restaurant != null) {
+                    Log.e(TAG, "lastVisitedRestaurant is ready " + restaurant.getLatitude() + " " + restaurant.getLongitude());
+                    lastVisitedRestaurant = new LatLng(restaurant.getLatitude(), restaurant.getLongitude());
+                    helper.saveLastVisitedRestaurant(0);
+                }
+
             }
         });
     }
@@ -272,7 +299,6 @@ public class RestaurantMapFragment extends Fragment {
     private void setUpCluster() {
 
         // Initialize the manager with the context and the map.
-        // (Activity extends context, so we can pass 'this' in the constructor.)
         mClusterManager = new ClusterManager<ClusterItems>(getContext(), myMap);
 
         ClusterItemsMarkerRenderer renderer = new ClusterItemsMarkerRenderer(getContext(), myMap, mClusterManager);
@@ -292,7 +318,7 @@ public class RestaurantMapFragment extends Fragment {
         mClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<ClusterItems>() {
             @Override
             public boolean onClusterClick(Cluster<ClusterItems> cluster) {
-                if(myMap.getMaxZoomLevel()-4 <= myMap.getCameraPosition().zoom)
+                if(myMap.getMaxZoomLevel()-3 <= myMap.getCameraPosition().zoom)
                     clickedCluster = cluster;
                 else {
                     clickedCluster = null;
@@ -324,43 +350,13 @@ public class RestaurantMapFragment extends Fragment {
 
         mClusterManager.getClusterMarkerCollection().setInfoWindowAdapter(new CustomItemAdapterForCluster());
 
-        // Point the map's listeners at the listeners implemented by the cluster
-        // manager.
+        // Point the map's listeners at the listeners implemented by the cluster manager.
         myMap.setOnCameraIdleListener(mClusterManager);
         myMap.setOnMarkerClickListener(mClusterManager);
         mClusterManager.setAnimation(false);
 
-        mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<ClusterItems>() {
-            @Override
-            public boolean onClusterItemClick(ClusterItems item) {
-                Log.d(TAG, "clusterItem clicked");
-                return false;
-            }
-        });
-
-        mClusterManager.setOnClusterItemInfoWindowClickListener(new ClusterManager.OnClusterItemInfoWindowClickListener<ClusterItems>() {
-            @Override
-            public void onClusterItemInfoWindowClick(ClusterItems item) {
-                Log.d(TAG, "clusterItem's window clicked  " + item.getId());
-                ((RestaurantsListActivity)getActivity()).moveToRestaurantDetailActivity(item.getId());
-            }
-        });
-
-        mClusterManager.setOnClusterInfoWindowClickListener(new ClusterManager.OnClusterInfoWindowClickListener<ClusterItems>() {
-            @Override
-            public void onClusterInfoWindowClick(Cluster<ClusterItems> cluster) {
-                List<ClusterItems> clusterItems = new ArrayList<>(cluster.getItems());
-                ChooseOneRestaurantDialog dialog = new ChooseOneRestaurantDialog(clusterItems);
-                dialog.show(getChildFragmentManager(), null);
-            }
-        });
-
         // Add cluster items (markers) to the cluster manager.
         addItems();
-
-        if(lastVisitedRestaurantId != -1){
-            viewModel.fetchOneRestaurantById(lastVisitedRestaurantId);
-        }
     }
 
     private void addItems() {
@@ -568,4 +564,10 @@ public class RestaurantMapFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+
+    }
 }

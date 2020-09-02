@@ -44,18 +44,23 @@ import java.util.List;
 /**
  *
  * RestaurantListActivity
- * Displays the list of all restaurants with brief information about them.
  *
  * This activity has two child fragments. Only one of two will be rendered inside FrameLayout in this activity at the time.
- * The map/list icon on the toolbar will control switching fragments.
+ * The map/list icon on the toolbar will control switching fragments to one another.
  *
  * The search icon on the toolbar is collapsed SearchView. Once a user clicks the icon, SearchView and filtering-area would appear.
- * In this filtering area, users can add additional criteria,
+ * In this filtering area, users can add additional criteria by manipulating UI components,
  *      1. name of the restaurant (query) == the text a user typed inside autocomplete TextView
  *      2. hazard level color (queryColor) == {"All", "Low", "Moderate", "High"}
  *      3. show only users' favourite restaurant (isFav)
  *      4. the lower bound of total number of issues restaurants have (queryMin)
  *      5. the higher bound of total number of issues restaurants have (queryMax)
+ *
+ * This activity will restart itself after getting location permission granted by a user to redraw Map at the current location of a user.
+ *
+ * This activity will also start the next activity (RestaurantDetailActivity) as either a user clicks a peg on MapFragment or clicks a item in recyclerview in ListFragment
+ *
+ * When this activity move onto RestaurantDetailActivity, it passes the uuid of the restaurant a user clicked to RestaurantDetailActivity.
  *
  */
 
@@ -130,7 +135,36 @@ public class RestaurantsListActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.restaurant_list_toolbar);
         setSupportActionBar(toolbar);
 
-        // this is just boilerplate code. can ignore ----
+        setUpValuesForSpinners();
+
+        if(isMapShown){
+            createRestaurantMapFragment();
+        }
+        else{
+            createRestaurantListFragment();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        isMapShown = helper.getRestaurantListActivityState();
+
+        if(isMapShown){
+            createRestaurantMapFragment();
+        }
+        else{
+            createRestaurantListFragment();
+        }
+    }
+
+    /**
+     * Set up values for Spinners' item
+     */
+    private void setUpValuesForSpinners(){
+        // this is a boilerplate code. can improve
+        // let ArrayAdapter have the value from 0 to 100 and Min or Max as its initial value
         String[] minRange = new String[102];
         String[] maxRange = new String[102];
         minRange[0] = getString(R.string.search_filter_min);
@@ -144,13 +178,6 @@ public class RestaurantsListActivity extends AppCompatActivity {
         ArrayAdapter<String> maxAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, maxRange);
         minInput.setAdapter(minAdapter);
         maxInput.setAdapter(maxAdapter);
-
-        if(isMapShown){
-            createRestaurantMapFragment();
-        }
-        else{
-            createRestaurantListFragment();
-        }
     }
 
     @Override
@@ -272,6 +299,9 @@ public class RestaurantsListActivity extends AppCompatActivity {
      *  Called from a child fragment. Method to move to RestaurantDetailsFragment.
      */
     public void moveToRestaurantDetailActivity(long restaurantId){
+        // save the previous screen state before moving onto the next activity
+        helper.saveRestaurantListActivityState(isMapShown);
+
         Intent intent = new Intent(RestaurantsListActivity.this, RestaurantDetailsActivity.class);
         // putExtra will come here include Long id
         intent.putExtra(RestaurantDetailsActivity.KEY_RESTAURANT_ID, restaurantId);
@@ -414,6 +444,7 @@ public class RestaurantsListActivity extends AppCompatActivity {
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Log.d(TAG, "onRequestPermissionsResult: Granted");
 
+                    // redraw map in order to show the current location of a user at the center
                     finishAffinity();
                     Intent intent = new Intent(RestaurantsListActivity.this, RestaurantsListActivity.class);
                     startActivity(intent);

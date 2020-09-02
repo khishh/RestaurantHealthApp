@@ -100,18 +100,18 @@
                 android:text="@{restaurant.lastInspectionDateFormatted}"
                 />
 
-            <ImageButton
-                android:id="@+id/favorite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_baseline_star_border_24"
-                />
-
         </RelativeLayout>
 
     </LinearLayout>
 
 </layout>
+
+<!--<ImageButton-->
+<!--android:id="@+id/favorite"-->
+<!--android:layout_width="wrap_content"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:layout_alignParentEnd="true"-->
+<!--android:layout_alignParentRight="true"-->
+<!--android:layout_centerVertical="true"-->
+<!--android:src="@drawable/ic_baseline_star_border_24"-->
+<!--    />-->

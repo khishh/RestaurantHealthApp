@@ -17,6 +17,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * RestaurantListViewModel
+ *
+ * 1. fetch one restaurant by its own uuid (= restaurantId)
+ * 2. fetch all restaurant meeting filtering requirements
+ * 3. retrieve all restaurant names stored in database (used for autosuggestion)
+ *
+ */
+
 public class RestaurantListViewModel extends AndroidViewModel {
 
     private static final String TAG = RestaurantListViewModel.class.getSimpleName();
@@ -35,7 +44,6 @@ public class RestaurantListViewModel extends AndroidViewModel {
     private FetchOneRestaurantByIdThread fetchOneRestaurantByIdThread;
     private FetchFilteredRestaurantThread fetchFilteredRestaurantThread;
     private FetchAllRestaurantNames fetchAllRestaurantNames;
-    private UpdateIsFavouriteThread updateIsFavouriteThread;
 
     public RestaurantListViewModel(@NonNull Application application) {
         super(application);
@@ -46,11 +54,6 @@ public class RestaurantListViewModel extends AndroidViewModel {
         fetchOneRestaurantByIdThread.start();
     }
 
-    private void fetchRestaurantById(long restaurantId) {
-        Restaurant restaurant = dao.getRestaurant(restaurantId);
-        restaurantLastVisited.postValue(restaurant);
-    }
-
     public void fetchFilteredRestaurant(String query, String color, boolean isFavourite, int min, int max){
         fetchFilteredRestaurantThread = new FetchFilteredRestaurantThread(query, color, isFavourite, min, max);
         fetchFilteredRestaurantThread.start();
@@ -58,23 +61,22 @@ public class RestaurantListViewModel extends AndroidViewModel {
         fetchAllRestaurantNames.start();
     }
 
-    private void updateIsFavourite(long restaurantId, boolean isFav){
-        Restaurant target = dao.getRestaurant(restaurantId);
-        target.setFav(!isFav);
-        dao.updateRestaurant(target);
-        // Test
-        target = dao.getRestaurant(restaurantId);
-        Log.e(TAG, target.toString());
+    public List<String> getAllRestaurantName(){
+        List<String> restaurantNames = new ArrayList<>();
+        for(Map.Entry<String, Long> e : Objects.requireNonNull(getRestaurantNameIdMap().getValue()).entrySet()){
+            restaurantNames.add(e.getKey());
+        }
+        return restaurantNames;
     }
 
-    public void updateIsFavouriteInDataBase(long restaurantId, boolean isFav){
-        updateIsFavouriteThread = new UpdateIsFavouriteThread(restaurantId, isFav);
-        updateIsFavouriteThread.start();
+    private void fetchRestaurantById(long restaurantId) {
+        Restaurant restaurant = dao.getRestaurant(restaurantId);
+        restaurantLastVisited.postValue(restaurant);
     }
 
     private void fetchRestaurantByFilters(String query, String hazardLevelColor, boolean isFavourite, int min, int max){
 
-        List<Restaurant> restaurant = new ArrayList<>();
+        List<Restaurant> restaurant;
         // default filter values
         if(query.equals(DEFAULT_QUERY) && isFavourite == DEFAULT_IS_FAV && min == DEFAULT_MIN && max == DEFAULT_MAX && hazardLevelColor.equals(DEFAULT_COLOR)){
             restaurant = dao.getAllRestaurants();
@@ -84,27 +86,23 @@ public class RestaurantListViewModel extends AndroidViewModel {
                 hazardLevelColor = "";
             }
             restaurant = dao.getFilteredRestaurant(min, max, query, hazardLevelColor, isFavourite);
-
-
         }
 
         restaurantList.postValue(restaurant);
     }
 
-    private class UpdateIsFavouriteThread extends Thread{
-        long restaurantId;
-        boolean isFav;
-
-        public UpdateIsFavouriteThread(long restaurantId, boolean isFav){
-            this.restaurantId = restaurantId;
-            this.isFav = isFav;
+    private void fetchRestaurantNames(){
+        List<Restaurant> restaurants = dao.getAllRestaurants();
+        HashMap<String, Long> nameAndIdMap = new HashMap<>();
+        for(Restaurant restaurant : restaurants){
+            nameAndIdMap.put(restaurant.getName(), restaurant.getRestaurantId());
         }
-
-        @Override
-        public void run() {
-            updateIsFavourite(restaurantId, isFav);
-        }
+        restaurantNameIdMap.postValue(nameAndIdMap);
     }
+
+    /**
+     * Thread classes
+     */
 
     private class FetchOneRestaurantByIdThread extends Thread{
 
@@ -119,13 +117,6 @@ public class RestaurantListViewModel extends AndroidViewModel {
             fetchRestaurantById(restaurantId);
         }
     }
-
-//    private class FetchRestaurantDataFromDataBaseThread extends Thread{
-//        @Override
-//        public void run() {
-//            fetchRestaurant();
-//        }
-//    }
 
     private class FetchFilteredRestaurantThread extends Thread{
 
@@ -147,22 +138,13 @@ public class RestaurantListViewModel extends AndroidViewModel {
         }
     }
 
-    private void fetchRestaurantNames(){
-        List<Restaurant> restaurants = dao.getAllRestaurants();
-        HashMap<String, Long> nameAndIdMap = new HashMap<>();
-        for(Restaurant restaurant : restaurants){
-//            LatLng latLng = new LatLng(restaurant.getLatitude(), restaurant.getLongitude());
-            nameAndIdMap.put(restaurant.getName(), restaurant.getRestaurantId());
-        }
-        restaurantNameIdMap.postValue(nameAndIdMap);
-    }
-
     private class FetchAllRestaurantNames extends Thread{
         @Override
         public void run() {
             fetchRestaurantNames();
         }
     }
+
 
     public MutableLiveData<List<Restaurant>> getRestaurantList() {
         return restaurantList;
@@ -180,22 +162,9 @@ public class RestaurantListViewModel extends AndroidViewModel {
         return restaurantNameIdMap;
     }
 
-    public List<String> getAllRestaurantName(){
-        List<String> restaurantNames = new ArrayList<>();
-        for(Map.Entry<String, Long> e : Objects.requireNonNull(getRestaurantNameIdMap().getValue()).entrySet()){
-            restaurantNames.add(e.getKey());
-        }
-        return restaurantNames;
-    }
-
     @Override
     protected void onCleared() {
         super.onCleared();
-
-//        if(fetchRestaurantDataFromDataBaseThread != null){
-//            fetchRestaurantDataFromDataBaseThread.interrupt();
-//            fetchRestaurantDataFromDataBaseThread = null;
-//        }
 
         if(fetchOneRestaurantByIdThread != null){
             fetchOneRestaurantByIdThread.interrupt();
@@ -211,5 +180,6 @@ public class RestaurantListViewModel extends AndroidViewModel {
             fetchAllRestaurantNames.interrupt();
             fetchAllRestaurantNames = null;
         }
+
     }
 }

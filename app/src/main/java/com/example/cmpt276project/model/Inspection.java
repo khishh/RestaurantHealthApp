@@ -1,21 +1,3 @@
-/*
-    This is the Inspection class implementation.
-    Last Modified Date: 2020/07/08
-
-    This class requires 7 inputs
-    1. String trackingNumber
-    2. String inspectionDate_S
-    3. String inspectionType_S
-    4. String numOfCritical_S
-    5. String numOfNonCritical_S
-    6. String hazardLevel
-    7. String violations_S
-
-    Remark:
-    1. The Variable violations requires violationsAnalysis method to separate different violations from a string
-    2. Input (2 Critical Numbers) should be same as the sum of critical and non-critical violations after calculate
- */
-
 // Package
 package com.example.cmpt276project.model;
 
@@ -31,7 +13,6 @@ import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -39,13 +20,6 @@ import java.util.Locale;
 // Inspection Class
 @Entity
 public class Inspection {
-
-    @NonNull
-    @PrimaryKey(autoGenerate = true)
-    private long inspectionId;
-
-    @NonNull
-    private long ownerRestaurantId;
 
     // Enum
     public enum InspectionType {
@@ -59,11 +33,17 @@ public class Inspection {
     private static final String TAG = Inspection.class.getSimpleName();
     public static final String[] INSPECTION_TYPE_S = {"Routine", "Follow-Up"};
     public static final String[] HAZARD_LEVEL_S = {"Low", "Moderate", "High"};
-    private static final String[] MONTH = {"January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"};
     private static final String dateFormat = "yyyyMMdd";
 
-    // Restaurant Number
+    /**
+     * Fields
+     */
+    @NonNull
+    @PrimaryKey(autoGenerate = true)
+    private long inspectionId;
+
+    @NonNull
+    private long ownerRestaurantId;
     private String trackingNumber;
 
     // Inspection Date and Type
@@ -83,7 +63,6 @@ public class Inspection {
     }
 
     @Ignore
-    // Constructor
     public Inspection(String trackingNumber, String inspectionDate_S, String inspectionType_S, String numOfCritical_S,
                       String numOfNonCritical_S, String hazardLevel_S, String violations_S) {
         this.trackingNumber = trackingNumber;
@@ -102,7 +81,6 @@ public class Inspection {
 
         // Error: Invalid Input - Date Format
         if (length != 8) {
-//            errorInvalidInputDate();
             return;
         }
 
@@ -120,7 +98,6 @@ public class Inspection {
         else{
             long timeDiff = System.currentTimeMillis() - inspectionDate.getTime();
             int daysDiff = (int) (timeDiff / (24*60*60*1000));
-//            Log.e(TAG, "time Diff == " + timeDiff + " dat diff == " + daysDiff);
 
             Calendar calendar = Calendar.getInstance(Locale.CANADA);
             calendar.setTime(inspectionDate);
@@ -151,15 +128,7 @@ public class Inspection {
             }
         }
 
-//        Log.e(TAG, "Orig == " + inspectionDate_S + " formattedDate == " + formattedDate);
     }
-
-//    private void errorInvalidInputDate() {
-//        this.inspectionYear = 1900;
-//        this.inspectionMonth = 1;
-//        this.inspectionDay = 1;
-//        Log.e(TAG, "Error: Invalid Input - Date Format");
-//    }
 
     private void initializeType(String inspectionType_S) {
         // Routine Case
@@ -224,6 +193,9 @@ public class Inspection {
         Log.e(TAG, "Error: Invalid Input - Critical or Non-Critical Number");
     }
 
+    /**
+     * Set HazardLevel
+     */
     private void initializeHazardLevel(String hazardLevelString) {
         // Set the Hazard Level
         if (hazardLevelString.equals(HAZARD_LEVEL_S[0])) {
@@ -241,7 +213,9 @@ public class Inspection {
         }
     }
 
-    // Separate different violations from a string
+    /**
+     * Break down long String containing multiple violations into shorter Strings
+     */
     private void violationsAnalysis(String violationsString) {
         int length = violationsString.length();
 
@@ -275,11 +249,11 @@ public class Inspection {
         if (violation.getCriticality() != Violation.Criticality.ERROR) {
             violations.add(violation);
         }
-
-        // Check Number of Critical / Non-Critical
-//        checkNumOfCritical();
     }
 
+    /**
+     * compute the number of critical issues and non=critical issues
+     */
     private void checkNumOfCritical() {
 
         int numOfIssues = violations.size();
@@ -319,7 +293,9 @@ public class Inspection {
         }
     }
 
-    // Getters
+    /**
+     *  Accessors
+     */
     public long getInspectionId() {
         return inspectionId;
     }
@@ -344,15 +320,6 @@ public class Inspection {
         this.trackingNumber = trackingNumber;
     }
 
-//    public int getInspectionYear() {
-//        return inspectionYear;
-//    }
-//    public int getInspectionMonth() {
-//        return inspectionMonth;
-//    }
-//    public int getInspectionDay() {
-//        return inspectionDay;
-//    }
     public InspectionType getInspectionType() {
         return inspectionType;
     }
@@ -405,9 +372,6 @@ public class Inspection {
         this.inspectionDate = inspectionDate;
     }
 
-    //    public String getInspectionDate() {
-//        return MONTH[inspectionMonth -1] + " " + inspectionDay + ", " + inspectionYear;
-//    }
     public String getInspectionType_S() {
         String message = INSPECTION_TYPE_S[0];
         switch (inspectionType) {
@@ -420,6 +384,7 @@ public class Inspection {
         }
         return message;
     }
+
     public String getHazardLevel_S() {
         String message = HAZARD_LEVEL_S[0];
         switch (hazardLevel) {
@@ -452,80 +417,4 @@ public class Inspection {
                 '}';
     }
 
-    // Get all the criticality of all violations
-    // Critical for true, otherwise false
-    public boolean[] getAllCritical() {
-        int numOfIssues = violations.size();
-        boolean[] allCritical = new boolean[numOfIssues];
-        for (int i = 0; i < numOfIssues; i++) {
-            if (violations.get(i).getCriticality() == Violation.Criticality.CRITICAL)
-                allCritical[i] = true;
-            else
-                allCritical[i] = false;
-        }
-        return allCritical;
-    }
-
-    // Get all the nature of all violations
-    public int[][] getAllNatures() {
-        int numOfIssues = violations.size();
-        int[][] allNatures = new int[numOfIssues][5];
-
-        for (int i = 0; i < numOfIssues; i++) {
-            for (int j = 0; j < 5; j++) {
-                allNatures[i][j] = violations.get(i).getNature()[j];
-            }
-        }
-        return allNatures;
-    }
-
-    // Get all the short descriptions
-    public String[] getAllShortDescriptions() {
-        int numOfIssues = violations.size();
-        String[] allShortDescriptions = new String[numOfIssues];
-        for (int i = 0; i < numOfIssues; i++) {
-            allShortDescriptions[i] = "";
-        }
-
-        for (int i = 0; i < numOfIssues; i++) {
-            boolean allDoesNotExist = true;
-            for (int j = 0; j < 5; j++) {
-                if (violations.get(i).getNature()[j] != 0) {
-                    allDoesNotExist = false;
-                }
-            }
-
-            if (allDoesNotExist) {
-                allShortDescriptions[i] = "Other Problem";
-            }
-        }
-
-        for (int i = 0; i < numOfIssues; i++) {
-            boolean atLeastOne = false;
-
-            for (int j = 0; j < 5; j++) {
-                if (violations.get(i).getNature()[j] != 0) {
-                    if (atLeastOne)
-                        allShortDescriptions[i] += "/";
-
-                    String temp = Violation.NATURE_KEYWORDS[j];
-                    temp = temp.substring(0, 1).toUpperCase() + temp.substring(1);
-                    allShortDescriptions[i] += temp;
-                    atLeastOne = true;
-                }
-            }
-            allShortDescriptions[i] += " Problem";
-        }
-        return allShortDescriptions;
-    }
-
-    // Get all the long descriptions
-    public String[] getAllLongDescriptions() {
-        int numOfIssues = violations.size();
-        String[] allLongDescriptions = new String[numOfIssues];
-        for (int i = 0; i < numOfIssues; i++) {
-            allLongDescriptions[i] = violations.get(i).getLongDescription();
-        }
-        return allLongDescriptions;
-    }
 }

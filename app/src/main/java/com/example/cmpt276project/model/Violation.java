@@ -1,27 +1,3 @@
-/*
-    This is the Violation class implementation.
-    Last Modified Date: 2020/07/08
-
-    This class requires a string(violations description) as parameter.
-    This class has four variables.
-    - description: String
-    - criticality: CRITICALITY
-    - nature: int[]
-    - longDescription: String
-
-    criticality is one of the states in CRITICALITY (CRITICAL, NON_CRITICAL, ERROR)
-    - CRITICAL for critical case
-    - NON_CRITICAL for non-critical case
-    - ERROR for failing in any analysis
-
-    nature is an integer array which index representing the natures
-    (value = 1 if exist, otherwise value = 0)
-    - index 0 = equipment
-    - index 1 = utensil
-    - index 2 = food
-    - index 3 = pest
-    - index 4 = employee
- */
 // Package
 package com.example.cmpt276project.model;
 
@@ -30,35 +6,37 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import com.example.cmpt276project.R;
-
 import java.util.Arrays;
 
 // Violation Class
 @Entity
 public class Violation {
 
-    // Enum
+    /**
+     * Enum
+     */
     public enum Criticality {
         CRITICAL, NON_CRITICAL, ERROR
     }
 
-    // Constant
+    /**
+     * Constants
+     */
     public final static String[] CRITICALITY_KEYWORDS = {"critical", "not critical"};
     public final static String[] NATURE_KEYWORDS = {"equipment", "utensil", "food", "pest", "employee"};
     public final static String[] NATURE_KEYWORDS_CAP = {"Equipment", "Utensil", "Food", "Pest", "Employee"};
     private final static int NUM_OF_COMMAS = 3;
 
-    // fields
+    /**
+     * Fields
+     */
 
     @NonNull
     @PrimaryKey (autoGenerate = true)
     private long violationId;
     @NonNull
     private long ownerInspectionId;
-    // Violation Input
     private String description;
-    // Violation Outputs
     private Criticality criticality;
     private int[] nature;
     private String longDescription;

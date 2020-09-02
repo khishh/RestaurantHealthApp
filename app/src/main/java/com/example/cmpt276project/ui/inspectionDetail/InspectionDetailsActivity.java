@@ -17,8 +17,6 @@
     Image: pest_violation, Website: https://www.pngegg.com/en/png-znbhf/download
     Image: employee_violation, Website: https://www.pngegg.com/en/png-dvzjj/download
 
-    // This function only uses for testing
-    testing_initialization();
  */
 
 // Package
@@ -52,19 +50,30 @@ import com.example.cmpt276project.model.Violation;
 import java.util.ArrayList;
 import java.util.List;
 
-// InspectionDetailsActivity Class
+/**
+ *
+ * InspectionDetailsActivity
+ *
+ * This activity receives the uuid of Inspection (Inspection::inspectionId) a user clicked on the previous activity
+ * (RestaurantDetailsActivity) through intent, so that database can fetch all necessary information.
+ *
+ * This activity shows all the violations of a specific inspection.
+ *
+ * A user can click a row in the recyclerview to see the detail of each violation through
+ * displaying Toast message. ( <==> Toast might not be sufficient)
+ *
+ */
+
 public class InspectionDetailsActivity extends AppCompatActivity {
 
     private static final String TAG = InspectionDetailsActivity.class.getSimpleName();
     public static final String KEY_INSPECTION_ID = "inspection_id";
 
-    private long inspectionId;
-
     private ActivityInspectionDetailsBinding binding;
     private InspectionViewModel viewModel;
     InspectionAdapter inspectionAdapter;
 
-    int images[] = {R.drawable.equipment_violation, R.drawable.utensil_violation,
+    int[] images = {R.drawable.equipment_violation, R.drawable.utensil_violation,
             R.drawable.food_violation, R.drawable.pest_violation, R.drawable.employee_violation,
             R.drawable.hazard_level};
 
@@ -74,7 +83,7 @@ public class InspectionDetailsActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_inspection_details);
 
         Intent intent = getIntent();
-        inspectionId = intent.getLongExtra(KEY_INSPECTION_ID, 1);
+        long inspectionId = intent.getLongExtra(KEY_INSPECTION_ID, 1);
 
         viewModel = ViewModelProviders.of(this).get(InspectionViewModel.class);
         viewModel.loadViolations(inspectionId);

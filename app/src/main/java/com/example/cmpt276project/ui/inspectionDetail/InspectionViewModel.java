@@ -15,6 +15,14 @@ import com.example.cmpt276project.model.database.dao.ViolationDao;
 
 import java.util.List;
 
+/**
+ *
+ * InspectionViewModel
+ *
+ * 1. Fetch one inspection and all violations belong to it
+ *
+ */
+
 public class InspectionViewModel extends AndroidViewModel {
 
     private static final String TAG = InspectionViewModel.class.getSimpleName();

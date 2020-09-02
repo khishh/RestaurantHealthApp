@@ -1,35 +1,27 @@
 package com.example.cmpt276project.ui.restaurantList;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cmpt276project.R;
 import com.example.cmpt276project.databinding.ListItemRestaurantBinding;
-import com.example.cmpt276project.model.Inspection;
 import com.example.cmpt276project.model.Restaurant;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
-// The custom adapter class for RestaurantListActivity's RecyclerView.
+/**
+ * RecyclerView adapter for RestaurantListFragment
+ */
 
 public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAdapter.ViewHolder> {
 
-    private static final String TAG = "RestaurantListAdapter";
+    private static final String TAG = RestaurantListAdapter.class.getSimpleName();
 
     private List<Restaurant> listRestaurant;
 
@@ -37,7 +29,6 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
 
     interface Listener{
         void onClick(long restaurantId);
-        void onIsFavChanged(long restaurantId, boolean curIsFav);
     }
 
     public void setListener(Listener listener){
@@ -87,35 +78,11 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
             }
         }
 
-        if(restaurant.isFav()){
-            holder.binding.favorite.setImageResource(R.drawable.ic_baseline_star_24);
-        }
-        else{
-            holder.binding.favorite.setImageResource(R.drawable.ic_baseline_star_border_24);
-        }
-
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(listener != null){
                     listener.onClick(restaurant.getRestaurantId());
-                }
-            }
-        });
-
-        holder.binding.favorite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(listener != null){
-                    listener.onIsFavChanged(restaurant.getRestaurantId(), restaurant.isFav());
-                }
-                if(restaurant.isFav()){
-                    holder.binding.favorite.setImageResource(R.drawable.ic_baseline_star_border_24);
-                    restaurant.setFav(false);
-                }
-                else{
-                    holder.binding.favorite.setImageResource(R.drawable.ic_baseline_star_24);
-                    restaurant.setFav(true);
                 }
             }
         });

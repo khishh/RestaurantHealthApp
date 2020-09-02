@@ -8,9 +8,12 @@ import androidx.room.PrimaryKey;
 import java.util.Date;
 import java.util.List;
 
-//Desc: This class is used to store the information of every single restaurant including the trackingNumber, name, address, etc. and a list of Inspection which are inspected from that restaurant
 @Entity
 public class Restaurant {
+
+    /**
+     * Fields
+     */
 
     @NonNull
     @PrimaryKey(autoGenerate = true)
@@ -44,9 +47,9 @@ public class Restaurant {
         this.longitude = longitude;
     }
 
-    // Accessor
-
-
+    /**
+     * Accessors
+     */
     public long getRestaurantId() {
         return restaurantId;
     }
@@ -159,22 +162,7 @@ public class Restaurant {
     }
 
     public void setInspection(List<Inspection> inspection) {
-//        for(int n=inspection.size()-1; n>=0; n--)
-//            for(int i=0; i<n; i++)
-//                if(inspection.get(i).getInspectionDate().before(inspection.get(i + 1).getInspectionDate())) {
-//                    Inspection temp = inspection.get(i);
-//                    inspection.set(i, inspection.get(i+1));
-//                    inspection.set(i+1, temp);
-//                }
         this.inspection = inspection;
-    }
-
-    // Get the latest inspection{
-    public Inspection getTheMostRecentInspection(){
-        if(inspection.size() > 0){
-            return inspection.get(0);
-        }
-        return null;
     }
 
     @Override

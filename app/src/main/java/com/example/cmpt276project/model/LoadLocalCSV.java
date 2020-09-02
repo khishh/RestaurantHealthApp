@@ -12,7 +12,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
 //Desc: Get the data from the input file to store in the list of restaurant
+
 public class LoadLocalCSV {
 
     private static final String TAG = "GetData";
@@ -80,7 +82,6 @@ public class LoadLocalCSV {
                 String[] tokens = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
 
                 if (tokens[0].equals(trackingNumber)) {
-//                    Log.d(TAG, Arrays.toString(tokens));
                     Inspection inspection = new Inspection(tokens[0].substring(1, tokens[0].length()-1),
                             tokens[1],
                             tokens[2].substring(1, tokens[2].length()-1),

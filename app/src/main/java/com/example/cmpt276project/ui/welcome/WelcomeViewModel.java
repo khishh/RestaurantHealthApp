@@ -35,15 +35,36 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * WelcomeViewModel
+ *
+ * 1. Check the last modified date of each CSV file by accessing Json file containing last_modified_date
+ * 2. Read the local CSV files and convert data into POJOs (Restaurant, Inspection, and Violation class)
+ * 3. Read the remote CSV files and convert data into POJOs.
+ * 4. Save data into database
+ * 5. notify WelcomeActivity when each task above is completed and started by posting values inside MutableLiveData<Boolean>
+ *     -> so that WelcomeActivity will know when it is ready to move on to the next activity
+ *
+ */
 public class WelcomeViewModel extends AndroidViewModel {
 
     private final static String TAG = WelcomeViewModel.class.getSimpleName();
+
+    /**
+     * Paths to Json containing the last modified date of each CSV file
+     */
     private final static String RESTAURANTS_POST_JSON = "https://data.surrey.ca/api/3/action/package_show?id=restaurants";
     private final static String INSPECTIONS_POST_JSON = "https://data.surrey.ca/api/3/action/package_show?id=fraser-health-restaurant-inspection-reports";
 
+    /**
+     * Paths to each CSV file
+     */
     private final static String RESTAURANT_CSV_REMOTE_PATH = "https://data.surrey.ca/dataset/3c8cb648-0e80-4659-9078-ef4917b90ffb/resource/0e5d04a2-be9b-40fe-8de2-e88362ea916b/download/restaurants.csv";
     private final static String INSPECTION_CSV_REMOTE_PATH = "https://data.surrey.ca/dataset/948e994d-74f5-41a2-b3cb-33fa6a98aa96/resource/30b38b66-649f-4507-a632-d5f6f5fe87f1/download/fraserhealthrestaurantinspectionreports.csv";
 
+    /**
+     * To extract necessary information from Json
+     */
     private static final String JSON_GROUP1 = "result";
     private static final String JSON_GROUP2 = "resources";
     private static final String JSON_ITEM1 = "format";
@@ -53,7 +74,6 @@ public class WelcomeViewModel extends AndroidViewModel {
     private boolean isRestaurantReportUpdated;
     private boolean isInspectionReportUpdated;
 
-    private String newUpdateRecord;
     private Set<String> favouriteRestaurantTrackingNumberSet = new HashSet<>();
 
     private MutableLiveData<Boolean> isRestaurantUpdateNeeded = new MutableLiveData<>();
@@ -86,10 +106,56 @@ public class WelcomeViewModel extends AndroidViewModel {
 
         restaurantUpdateCheckThread.start();
         inspectionUpdateCheckThread.start();
-
-        Log.e(TAG, "newUpdateRecord == " + newUpdateRecord);
     }
 
+    public void saveInitialDataSetIntoDataBase(){
+        Log.e(TAG, "saving initial data set started");
+        LoadLocalCSVThread thread = new LoadLocalCSVThread();
+        thread.start();
+    }
+
+    public void readNewRestaurantFromRemote(){
+        Log.e(TAG, "load remote CSV called");
+        if(loadRemoteCSVThread == null) {
+            Log.e(TAG, "load remote CSV started");
+            loadRemoteCSVThread = new LoadRemoteCSVThread();
+            loadRemoteCSVThread.start();
+        }
+        if(clearDataBaseThread == null){
+            Log.e(TAG, "clear local DB started");
+            clearDataBaseThread = new ClearDataBaseThread();
+            clearDataBaseThread.start();
+        }
+    }
+
+    /**
+     * Accessor
+     */
+    public MutableLiveData<Boolean> getIsInspectionUpdateNeeded() {
+        return isInspectionUpdateNeeded;
+    }
+
+    public MutableLiveData<Boolean> getIsRestaurantUpdateNeeded() {
+        return isRestaurantUpdateNeeded;
+    }
+
+    public MutableLiveData<Boolean> getIsUpdateCompleted() {
+        return isUpdateCompleted;
+    }
+
+    public MutableLiveData<Boolean> getIsDownloadingFromRemote() {
+        return isDownloadingFromRemote;
+    }
+
+    public MutableLiveData<Boolean> getIsSavingDataIntoDataBase() {
+        return isSavingDataIntoDataBase;
+    }
+
+    /**
+     * Check if there is any update.
+     * @param _url URL to Json file containing the last modified date of a CSV file
+     * @return true if there is any new update
+     */
     private boolean isReportUpdated(String _url){
 
         try{
@@ -118,25 +184,13 @@ public class WelcomeViewModel extends AndroidViewModel {
                 lastModifiedDate = helper.getLastModifiedDateInspection();
             }
 
-            Log.e(TAG,  lastUpdatedDate + " " + lastModifiedDate);
+            Log.e(TAG,  "lastUpdatedDate == " + lastUpdatedDate + " lastModifiedDate == " + lastModifiedDate);
 
             if(lastUpdatedDate.compareTo(lastModifiedDate) > 0){
 
-//                // if there is no newUpdateRecord yet
-//                if(newUpdateRecord == null){
-//                    newUpdateRecord = lastUpdatedDate;
-//                }
-//                // if both csv files have an update, keep the latest update of either restaurant report or inspection report
-//                else{
-//                    if(lastUpdatedDate.compareTo(newUpdateRecord) > 0){
-//                        newUpdateRecord = lastUpdatedDate;
-//                    }
-//                }
-
-//                Log.d(TAG, "passed True");
                 // JSON says there is an update since the app had loaded data last time
                 if(_url.compareTo(RESTAURANTS_POST_JSON) == 0){
-                    helper.saveLastModifiedDateRestaurant(lastUpdatedDate);
+                    helper.saveLastLaunchTime(lastUpdatedDate);
                     Log.e(TAG, "new LastModifiedDateRestaurant == " + lastUpdatedDate);
                     isRestaurantReportUpdated = true;
                     isRestaurantUpdateNeeded.postValue(true);
@@ -174,60 +228,10 @@ public class WelcomeViewModel extends AndroidViewModel {
         return false;
     }
 
-    public void saveInitialDataSetIntoDataBase(){
-        Log.e(TAG, "saving initial data set started");
-        LoadLocalCSVThread thread = new LoadLocalCSVThread();
-        thread.start();
-    }
-
-    public void readNewRestaurantFromRemote(){
-        Log.e(TAG, "load remote CSV called");
-        if(loadRemoteCSVThread == null) {
-            Log.e(TAG, "load remote CSV started");
-            loadRemoteCSVThread = new LoadRemoteCSVThread();
-            loadRemoteCSVThread.start();
-        }
-        if(clearDataBaseThread == null){
-            Log.e(TAG, "clear local DB started");
-            clearDataBaseThread = new ClearDataBaseThread();
-            clearDataBaseThread.start();
-        }
-    }
-
-    public MutableLiveData<Boolean> getIsInspectionUpdateNeeded() {
-        return isInspectionUpdateNeeded;
-    }
-
-    public MutableLiveData<Boolean> getIsRestaurantUpdateNeeded() {
-        return isRestaurantUpdateNeeded;
-    }
-
-    public MutableLiveData<Boolean> getIsUpdateCompleted() {
-        return isUpdateCompleted;
-    }
-
-    public MutableLiveData<Boolean> getIsDownloadingFromRemote() {
-        return isDownloadingFromRemote;
-    }
-
-    public MutableLiveData<Boolean> getIsSavingDataIntoDataBase() {
-        return isSavingDataIntoDataBase;
-    }
-
-    private class CheckUpdateThread extends Thread{
-
-        private String json_path;
-
-        public CheckUpdateThread(String path){
-            json_path = path;
-        }
-
-        @Override
-        public void run() {
-            isReportUpdated(json_path);
-        }
-    }
-
+    /**
+     * Load initial data from Local CSV
+     * @return List<Restaurant> : list of restaurant loaded from local csv
+     */
     private List<Restaurant> readLocalCSV(){
         InputStream restaurantSrc = getApplication().getResources().openRawResource(R.raw.restaurants);
         InputStream inspectionSrc = getApplication().getResources().openRawResource(R.raw.inspectionreports);
@@ -237,6 +241,10 @@ public class WelcomeViewModel extends AndroidViewModel {
         return restaurants;
     }
 
+    /**
+     * Save all Restaurant data into local DB
+     * @param restaurants the data to be stored in DB
+     */
     private void saveDataIntoDataBase(List<Restaurant> restaurants){
         Log.e(TAG, "saveDataIntoDataBase started");
 
@@ -262,98 +270,11 @@ public class WelcomeViewModel extends AndroidViewModel {
         }
 
         isSavingDataIntoDataBase.postValue(false);
-
-//        //testing
-//        List<Restaurant> restaurantsTest = dao.getAllRestaurants();
-//        List<Inspection> inspectionsTest = dao.getAllInspections();
-//        Log.e(TAG, "violation Test " + inspectionsTest.get(0).toString() + " id: " + inspectionsTest.get(1).getInspectionId());
-//        List<Violation> violationsTest = dao.getViolationsOfOneInspection(inspectionsTest.get(1).getInspectionId());
-//
-//        for(Restaurant res : restaurantsTest){
-//            Log.e(TAG, res.toString());
-//        }
-//
-//        for(Inspection inspectionTest : inspectionsTest) {
-//            Log.e(TAG, inspectionTest.toString());
-//        }
-//
-//        Log.e(TAG, "violation: inspectionList size == " + inspectionsTest.size());
-//        Log.e(TAG, "violation orig " + restaurants.get(1).getInspection().get(1).toString());
-//        Log.e(TAG, "violation result " + violationsTest.size() + " " + violationsTest.toString());
-//
-//        for(Violation violation : violationsTest){
-//            Log.e(TAG, "violation res " + violation.toString());
-//        }
     }
 
-    private class LoadLocalCSVThread extends Thread{
-
-        @Override
-        public void run() {
-            /*
-            InputStream restaurantSrc = getApplication().getResources().openRawResource(R.raw.restaurants);
-            InputStream inspectionSrc = getApplication().getResources().openRawResource(R.raw.inspectionreports);
-
-            GetData dataProcessing = new GetData(restaurantSrc,inspectionSrc);
-            List<Restaurant> initialRestaurants = dataProcessing.read();
-             */
-
-            List<Restaurant> restaurants = readLocalCSV();
-            saveDataIntoDataBase(restaurants);
-
-            /*
-            List<Long> restaurantIds = dao.insertRestaurant(initialRestaurants);
-
-            for(int i = 0; i < initialRestaurants.size(); i++){
-                for(Inspection _inspection : initialRestaurants.get(i).getInspection()){
-                    _inspection.setOwnerRestaurantId(restaurantIds.get(i));
-
-//                    Log.e(TAG, initialRestaurants.get(i).getTrackingNumber() + " == " + _inspection.getTrackingNumber());
-                }
-
-                List<Long> inspectionIds = dao.insertInspection(initialRestaurants.get(i).getInspection());
-                for(int j = 0; j < initialRestaurants.get(i).getInspection().size(); j++){
-                    Inspection _inspection = initialRestaurants.get(i).getInspection().get(j);
-//                    Log.e(TAG, "check _inspection size == " + _inspection.getViolations().size());
-                    for(int k = 0; k < _inspection.getViolations().size(); k++){
-                        _inspection.getViolations().get(k).setOwnerInspectionId(inspectionIds.get(j));
-//                        Log.e(TAG, "Check " + inspectionIds.get(j) + " " + _inspection.getViolations().get(k).getOwnerInspectionId());
-                    }
-
-                    // insert violations into database
-                    dao.insertViolation(_inspection.getViolations());
-                }
-            }
-
-            //testing
-            List<Restaurant> restaurantsTest = dao.getAllRestaurants();
-            List<Inspection> inspectionsTest = dao.getAllInspections();
-            Log.e(TAG, "violation Test " + inspectionsTest.get(0).toString() + " id: " + inspectionsTest.get(1).getInspectionId());
-            List<Violation> violationsTest = dao.getViolationsOfOneInspection(inspectionsTest.get(1).getInspectionId());
-
-            for(Restaurant res : restaurantsTest){
-                Log.e(TAG, res.toString());
-            }
-
-            for(Inspection inspectionTest : inspectionsTest) {
-                Log.e(TAG, inspectionTest.toString());
-            }
-
-            Log.e(TAG, "violation: inspectionList size == " + inspectionsTest.size());
-
-            Log.e(TAG, "violation orig " + initialRestaurants.get(1).getInspection().get(1).toString());
-
-            Log.e(TAG, "violation result " + violationsTest.size() + " " + violationsTest.toString());
-
-            for(Violation violation : violationsTest){
-                Log.e(TAG, "violation res " + violation.toString());
-            }
-             */
-
-            isUpdateCompleted.postValue(true);
-        }
-    }
-
+    /**
+     * Fetching new data from remote CSVs and return new data
+     */
     private List<Restaurant> readRemoteCSVs(){
 
         isDownloadingFromRemote.postValue(true);
@@ -376,15 +297,14 @@ public class WelcomeViewModel extends AndroidViewModel {
             URLConnection connection_inspection = url_inspection.openConnection();
 
             BufferedReader br = new BufferedReader(new InputStreamReader(connection_restaurant.getInputStream()));
+            // skip the first line
             String line = br.readLine();
             while((line = br.readLine()) != null){
                 String[] tokens = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
-//                System.out.println(Arrays.toString(tokens));
                 Restaurant restaurant = new Restaurant();
                 restaurant.setTrackingNumber(tokens[0]);
                 restaurant.setName(tokens[1].replace("\"", ""));
                 restaurant.setAddress(tokens[2]);
-//                System.out.println(tokens[5] + " " + tokens[6]);
                 restaurant.setLatitude(Double.parseDouble(tokens[5]));
                 restaurant.setLongitude(Double.parseDouble(tokens[6]));
 
@@ -406,11 +326,11 @@ public class WelcomeViewModel extends AndroidViewModel {
 
             BufferedReader br2 = new BufferedReader(new InputStreamReader(connection_inspection.getInputStream()));
 
+            // skip the first line
             String line2 = br2.readLine();
             while((line2 = br2.readLine()) != null){
 
                 String[] tokens = line2.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
-//                Log.e(TAG, Arrays.toString(tokens));
                 if(tokens[0].length() > 0) {
                     Inspection inspection = new Inspection(tokens[0],
                             tokens[1],
@@ -438,7 +358,6 @@ public class WelcomeViewModel extends AndroidViewModel {
                     restaurant.computeLastInspectionDate();
                     restaurant.computeTotalNumIssues();
                 }
-//                Log.e(TAG, restaurant.toString());
             }
         }
         catch (IOException e){
@@ -450,6 +369,30 @@ public class WelcomeViewModel extends AndroidViewModel {
         Log.e(TAG, "Fetch finished!!");
 
         return restaurants;
+    }
+
+    private class CheckUpdateThread extends Thread{
+
+        private String json_path;
+
+        public CheckUpdateThread(String path){
+            json_path = path;
+        }
+
+        @Override
+        public void run() {
+            isReportUpdated(json_path);
+        }
+    }
+
+    private class LoadLocalCSVThread extends Thread{
+
+        @Override
+        public void run() {
+            List<Restaurant> restaurants = readLocalCSV();
+            saveDataIntoDataBase(restaurants);
+            isUpdateCompleted.postValue(true);
+        }
     }
 
     private class LoadRemoteCSVThread extends Thread{
@@ -475,7 +418,6 @@ public class WelcomeViewModel extends AndroidViewModel {
             violationDao.deleteAllViolation();
         }
     }
-
 
     @Override
     protected void onCleared() {

@@ -1,11 +1,9 @@
 package com.example.cmpt276project.util;
 
 import androidx.room.TypeConverter;
-import androidx.room.TypeConverters;
 
 import com.example.cmpt276project.model.Inspection;
 import com.example.cmpt276project.model.Violation;
-import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;

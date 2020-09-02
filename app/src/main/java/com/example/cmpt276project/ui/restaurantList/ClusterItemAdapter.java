@@ -10,14 +10,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cmpt276project.R;
-
-
-import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * RecyclerView adapter for clusters in MapFragment
+ */
 
 public class ClusterItemAdapter extends RecyclerView.Adapter<ClusterItemAdapter.ViewHolder> {
 
-    private List<ClusterItems> clusterItems = new ArrayList<>();
+    private List<ClusterItems> clusterItems;
 
     public ClusterItemAdapter(List<ClusterItems> cluster){
         clusterItems = cluster;
