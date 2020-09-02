@@ -59,5 +59,7 @@ Since this application uses Google Map and Places API, you will need to get your
 1. RxJava2: https://github.com/amitshekhariitbhu/RxJava2-Android-Samples
 2. Room: https://developer.android.com/topic/libraries/architecture/room.html
 3. Google Map and Places: https://developers.google.com/maps/documentation
-4. Restaurants: http://data.surrey.ca/dataset/restaurants
-5. Fraser Health Restaurant Inspection Reports: https://data.surrey.ca/dataset/fraser-health-restaurant-inspection-reports 
+
+## Data Sources
+1. Restaurants: http://data.surrey.ca/dataset/restaurants
+2. Fraser Health Restaurant Inspection Reports: https://data.surrey.ca/dataset/fraser-health-restaurant-inspection-reports 
