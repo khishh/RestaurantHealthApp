@@ -53,6 +53,8 @@ ListFragment
 ## How to use this app
 
 Since this application uses Google Map and Places API, you will need to get your own API key to experience the full functionality of this app. Once you issued your own API key, search for google_maps_api.xml and paste your key inside a string resource.
+This is the file you need to add your own API key -> 
+<a href = "https://github.com/khishh/RestaurantHealthApp/tree/master/app/src/debug/res/values">google_maps_api.xml</a>
 
 ## Library reference resources:
 
