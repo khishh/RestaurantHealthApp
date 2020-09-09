@@ -14,6 +14,7 @@ This app shows the hygiene of local restaurants in Surrey (a city close to Vanco
   - ask a user if they would like to check new data available in remote API
   - if a user answered no, start next activity (RestaurantListActivity) immediately
   - if a user answered yes and there is any update in the remote CSV file, fetch new data from the CSV file and save it into database
+    (* saving data int database might take 30~40 seconds).
   - start RestaurantListActivity once fetching from remote API and storing new data into database has finished
  
 2. RestaurantListActivity
@@ -40,7 +41,7 @@ ListFragment
 
 ![](FraserHealthApp_Screenshots/restaurant_details.png)
 
-  - display all the past inspection of a restaurant a user clicked in either MapFragment or ListFragment
+  - display all the past inspection of a restaurant a user clicked in either MapFragment or ListFragmentaa
   - let a user click each row, starting the next activity (InspectionDetailActivity)
 
 4. InspectionDetailActivity
