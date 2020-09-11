@@ -1,8 +1,10 @@
 # RestaurantHealthApp
 This project was originally a group project in the software engineering course. I worked in a group of 4 people for 3 iterations (each iteration is 2 weeks), adopting Scrum process. I played roles in Product owner, Team member, and Scrum master in each iteration.
-Since we did not take Android Architecture into consideration at that time, this is the version after I made various modifications to the original project. Hopefully, this would show my understanding of MVVM, one of major Android Architectures.
+Since we did not take Android Architecture into consideration at that time and also we developed it on GitLab exclusive for University (I believe), this is the version after I made various modifications to the original project. Hopefully, this would show my understanding of MVVM, one of major Android Architectures.
+Below is the URL to access my group repo if you can access. 
+<a href = "https://csil-git1.cs.surrey.sfu.ca/cmpt-276-group-3/cmpt276project">My group project Repo</a>
 
-This app shows the hygiene of local restaurants in Surrey (a city close to Vancouver in Canada) based on the open-source data available in https://data.surrey.ca/. Each restaurant has a record of health inspections and each inspection is evaluated by a hazard level(Low, Moderate, or High) depending on the nature and the number of violations found at that time. With this app, users can easily check the hygienic status of various local restaurants and enhance the awareness of their food safety in their neighborhood.
+This app shows the hygiene of local restaurants in Surrey (a city close to Vancouver in Canada) based on the open-source data available in https://data.surrey.ca/. Each restaurant has a record of health inspections and each inspection is evaluated by a hazard level(Low, Moderate, or High) depending on the nature and the number of violations found at that time. With this app, users can easily check the hygienic status of various local restaurants and enhance the awareness of their fo"od safety in their neighborhood.
 
 ## Each State of this app
 
