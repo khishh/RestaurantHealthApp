@@ -28,12 +28,24 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.CertPathValidatorException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 /**
  * WelcomeViewModel
@@ -151,6 +163,68 @@ public class WelcomeViewModel extends AndroidViewModel {
         return isSavingDataIntoDataBase;
     }
 
+    public static class HttpsTrustManager implements X509TrustManager {
+
+        private static TrustManager[] trustManagers;
+        private static final X509Certificate[] _AcceptedIssuers = new X509Certificate[]{};
+
+        @Override
+        public void checkClientTrusted(
+                java.security.cert.X509Certificate[] x509Certificates, String s)
+                throws java.security.cert.CertificateException {
+
+        }
+
+        @Override
+        public void checkServerTrusted(
+                java.security.cert.X509Certificate[] x509Certificates, String s)
+                throws java.security.cert.CertificateException {
+
+        }
+
+        public boolean isClientTrusted(X509Certificate[] chain) {
+            return true;
+        }
+
+        public boolean isServerTrusted(X509Certificate[] chain) {
+            return true;
+        }
+
+        @Override
+        public X509Certificate[] getAcceptedIssuers() {
+            return _AcceptedIssuers;
+        }
+
+        public static void allowAllSSL() {
+            HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
+
+                @Override
+                public boolean verify(String arg0, SSLSession arg1) {
+                    return true;
+                }
+
+            });
+
+            SSLContext context = null;
+            if (trustManagers == null) {
+                trustManagers = new TrustManager[]{new HttpsTrustManager()};
+            }
+
+            try {
+                context = SSLContext.getInstance("TLS");
+                context.init(null, trustManagers, new SecureRandom());
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            } catch (KeyManagementException e) {
+                e.printStackTrace();
+            }
+
+            HttpsURLConnection.setDefaultSSLSocketFactory(context
+                    .getSocketFactory());
+        }
+
+    }
+
     /**
      * Check if there is any update.
      * @param _url URL to Json file containing the last modified date of a CSV file
@@ -161,7 +235,9 @@ public class WelcomeViewModel extends AndroidViewModel {
         try{
             URL url = new URL(_url);
 
-            HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+            HttpsTrustManager.allowAllSSL();
+
+            HttpsURLConnection httpURLConnection = (HttpsURLConnection)url.openConnection();
             httpURLConnection.setConnectTimeout(5000);
             httpURLConnection.setReadTimeout(2500);
             httpURLConnection.setRequestMethod("GET");
@@ -206,7 +282,8 @@ public class WelcomeViewModel extends AndroidViewModel {
 
         } catch (MalformedURLException e) {
             Log.e(TAG, "URL error : " + e.getMessage());
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             Log.e(TAG, "Download failed : " + e.getMessage());
         } catch (JSONException e) {
             Log.e(TAG, "Catch failed : " + e.getMessage());
