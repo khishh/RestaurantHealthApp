@@ -1,8 +1,8 @@
 # RestaurantHealthApp
 This project was originally a group project in the software engineering course. I worked in a group of 4 people for 3 iterations (each iteration is 2 weeks), adopting Scrum process. I played roles in Product owner, Team member, and Scrum master in each iteration.
-Since we did not take Android Architecture into consideration at that time, this is the version after I made various modifications to the original project. Hopefully, this would show my understanding of MVVM, one of major Android Architectures.
+Since we did not take Android Architecture into consideration at that time and also we developed it on GitLab exclusive for University (I believe), this is the version after I made various modifications to the original project. Hopefully, this would show my understanding of MVVM, one of major Android Architectures.
 
-This app shows the hygiene of local restaurants in Surrey (a city close to Vancouver in Canada) based on the open-source data available in https://data.surrey.ca/. Each restaurant has a record of health inspections and each inspection is evaluated by a hazard level(Low, Moderate, or High) depending on the nature and the number of violations found at that time. With this app, users can easily check the hygienic status of various local restaurants and enhance the awareness of their food safety in their neighborhood.
+This app shows the hygiene of local restaurants in Surrey (a city close to Vancouver in Canada) based on the open-source data available in https://data.surrey.ca/. Each restaurant has a record of health inspections and each inspection is evaluated by a hazard level(Low, Moderate, or High) depending on the nature and the number of violations found at that time. With this app, users can easily check the hygienic status of various local restaurants and enhance the awareness of their fo"od safety in their neighborhood.
 
 ## Each State of this app
 
@@ -14,6 +14,7 @@ This app shows the hygiene of local restaurants in Surrey (a city close to Vanco
   - ask a user if they would like to check new data available in remote API
   - if a user answered no, start next activity (RestaurantListActivity) immediately
   - if a user answered yes and there is any update in the remote CSV file, fetch new data from the CSV file and save it into database
+    (*saving data int database might take 30~40 seconds).
   - start RestaurantListActivity once fetching from remote API and storing new data into database has finished
  
 2. RestaurantListActivity
@@ -40,7 +41,7 @@ ListFragment
 
 ![](FraserHealthApp_Screenshots/restaurant_details.png)
 
-  - display all the past inspection of a restaurant a user clicked in either MapFragment or ListFragment
+  - display all the past inspection of a restaurant a user clicked in either MapFragment or ListFragmentaa
   - let a user click each row, starting the next activity (InspectionDetailActivity)
 
 4. InspectionDetailActivity
@@ -53,6 +54,8 @@ ListFragment
 ## How to use this app
 
 Since this application uses Google Map and Places API, you will need to get your own API key to experience the full functionality of this app. Once you issued your own API key, search for google_maps_api.xml and paste your key inside a string resource.
+This is the file you need to add your own API key -> 
+<a href = "https://github.com/khishh/RestaurantHealthApp/tree/master/app/src/debug/res/values">google_maps_api.xml</a>
 
 ## Library reference resources:
 
